@@ -1,0 +1,148 @@
+{
+  "category": "ocr",
+  "label": "OCR & document extraction",
+  "insluit_regel": "Hosted, commercially callable OCR / document-extraction APIs that turn PDFs and images into structured text (markdown/JSON), one row per flagship offering from a distinct provider.",
+  "zekerheidslabel": "light estimate",
+  "laatst_bijgewerkt": "2026-08-20",
+  "assen": [
+    { "key": "prijs", "label": "the lowest price", "metric": "prijs", "richting": "min", "kolom": "Price", "keywords": ["price per page", "prijs per pagina", "cost per 1000 pages", "kosten per 1000 pagina's", "ocr pricing", "per-page pricing", "credits per page", "cheapest", "goedkoopste"] },
+    { "key": "benchmark_score", "label": "the highest published independent benchmark score", "metric": "omnidocbench_composite", "richting": "max", "kolom": "Score", "keywords": ["omnidocbench", "document parsing benchmark", "character error rate", "accuracy", "accurate", "nauwkeurigheid", "edit distance", "ocrbench", "doc-ai leaderboard"], "caveat": "Only two of the seven rows have a published OmniDocBench composite (GLM-OCR 95.22, Mistral OCR 85.66, both from the v1.6 leaderboard), so this is a two-point comparison, not a most-accurate ranking; the hyperscalers and credit-priced platforms publish none and stay null rather than guessed. Leaderboard entries are not version-tagged, so the Mistral figure predates the June 2026 OCR 4 release. The benchmark is Tier-2 and saturated at the top, where open self-hostable models lead." },
+    { "key": "tabel_layout", "label": "table & layout extraction", "metric": "table_layout_support", "richting": "filter", "kolom": "tables", "keywords": ["table extraction", "tabel extractie", "layout", "teds", "form parser", "bounding box", "complex tables"] },
+    { "key": "taaldekking_handschrift", "label": "language coverage and handwriting", "metric": "handwriting_support", "richting": "filter", "kolom": "handwriting", "keywords": ["language coverage", "talen", "handwriting", "handschrift", "multilingual", "meertalig", "cursive", "scanned"] },
+    { "key": "gestructureerde_output", "label": "structured JSON/Markdown output", "metric": "structured_output", "richting": "filter", "kolom": "JSON", "keywords": ["json", "markdown", "structured output", "gestructureerde output", "schema extraction", "key-value", "machine-readable"] },
+    { "key": "max_grootte_async", "label": "the largest documents (async)", "metric": "max_pages_async", "richting": "max", "kolom": "Max pages", "keywords": ["max pages", "max pagina's", "document size", "bestandsgrootte", "async", "asynchronous", "batch", "large documents", "page limit", "largest document"], "caveat": "Async page limits are documented maximums, not throughput or accuracy measures." }
+  ],
+  "providers": [
+    {
+      "naam": "Mistral OCR 4",
+      "provider": "Mistral AI",
+      "modelFamilie": "mistral-ocr-latest",
+      "prijs": { "waarde": 4.0, "eenheid": "$/1000 pages", "vergelijkbaar": true },
+      "metrics": { "omnidocbench_composite": 85.66, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": 1000 },
+      "sterk": "Dedicated single-model OCR API (OCR 4, released 23 June 2026) with markdown plus HTML-table output, paragraph-level bounding boxes, block classification and inline confidence scores, 170 languages across 10 language groups, and a 50% batch discount ($2/1000). OCR 4.1 (public preview since 16 July 2026) adds structural block labels and block-level confidence; annotated Document AI extraction is $5/1000 pages.",
+      "zwak": "The OCR 4 release doubled the price from $2 to $4 per 1000 pages, making it the most expensive comparable per-page option here — the hyperscalers' basic OCR tier is $1.50/1000. The 85.66 OmniDocBench composite is the independent v1.6 leaderboard's untagged 'Mistral OCR' entry (April 2026), so it predates OCR 4; Mistral self-reports 93.07 on OmniDocBench, 85.20 on OlmOCRBench and a 72% average human-preference win rate for OCR 4, all Tier 3. The 1000-page async cap is carried over from the June 2026 check and could not be re-verified.",
+      "bron": "Mistral OCR 4 launch, API pricing page and OCR 4.1 model card (Tier 1); OmniDocBench v1.6 leaderboard (Tier 2); vendor benchmark and win-rate claims self-reported (Tier 3)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Google Document AI (Enterprise Document OCR)",
+      "provider": "Google Cloud",
+      "modelFamilie": "Enterprise Document OCR / Layout Parser",
+      "prijs": { "waarde": 1.5, "eenheid": "$/1000 pages", "vergelijkbaar": true },
+      "metrics": { "omnidocbench_composite": null, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": 200 },
+      "sterk": "Mature, broad processor suite (OCR $1.50/1000 -> $0.60 above 5M pages, Layout Parser $10, Form/Custom $30) with strong layout, tables and handwriting; high-volume tiering is the cheapest at scale.",
+      "zwak": "No published OmniDocBench score for the dedicated processors (null); real cost rises sharply for table/form parsing ($10-30/1000) plus GCP project overhead; sync OCR caps ~15 pages, async to ~200 per call.",
+      "bron": "Google Cloud Document AI pricing & docs (Tier 1)",
+      "bron_datum": "2026-06-22"
+    },
+    {
+      "naam": "AWS Textract (DetectDocumentText)",
+      "provider": "Amazon Web Services",
+      "modelFamilie": "Textract Detect / AnalyzeDocument",
+      "prijs": { "waarde": 1.5, "eenheid": "$/1000 pages", "vergelijkbaar": true },
+      "metrics": { "omnidocbench_composite": null, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": 3000 },
+      "sterk": "Battle-tested at enterprise scale; basic OCR $1.50/1000 dropping to $0.60 above 1M pages, async handles up to 3000-page/500MB PDFs and TIFFs, strong forms/tables/queries and printed+handwritten English, with Layout free when used alongside Tables.",
+      "zwak": "No public OmniDocBench score (null); language coverage limited to six Latin-script languages (English, French, German, Italian, Portuguese, Spanish) with handwriting and Queries English-only and no vertical-text support; tables +$15 and forms +$50 per 1000 (falling to $10 and $40 above 1M) make real-world cost far above the headline, and sync calls cap at 1 page / 10MB.",
+      "bron": "AWS Textract pricing & document-quota docs (Tier 1)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Azure Document Intelligence (Read)",
+      "provider": "Microsoft Azure",
+      "modelFamilie": "Read / Layout / Prebuilt",
+      "prijs": { "waarde": 1.5, "eenheid": "$/1000 pages", "vergelijkbaar": true },
+      "metrics": { "omnidocbench_composite": null, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": 2000 },
+      "sterk": "Broadest language coverage for print/handwriting, Read OCR $1.50/1000 (->$0.60 above 1M), strong Layout API for tables/structure, mature prebuilt models (invoice, receipt, ID) and JSON output.",
+      "zwak": "No public OmniDocBench score (null); Layout/prebuilt $10/1000 and Custom Extraction $30/1000 plus $6/1000 add-ons (formula, high-res) push real cost up well beyond Read pricing.",
+      "bron": "Azure Document Intelligence pricing page (Tier 1)",
+      "bron_datum": "2026-06-22"
+    },
+    {
+      "naam": "Reducto",
+      "provider": "Reducto",
+      "prijs": { "waarde": null, "eenheid": "$/1000 pages", "vergelijkbaar": false },
+      "metrics": { "omnidocbench_composite": null, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": null },
+      "sterk": "Agentic document platform aimed at hard real-world docs (complex tables, bounding boxes, schema extraction), 30+ formats, webhooks/async; well-regarded for accuracy on messy enterprise PDFs, with a 20% credit discount on non-urgent batch parsing under a 12-hour completion guarantee.",
+      "zwak": "Pricing not comparable: credit-based ($0.015/credit after 15K free on Standard, Growth/Enterprise custom) with no clean public per-page rate, since credits consumed depend on operation type, configuration and page count; no published OmniDocBench score (its '67.8%' figure came from a non-Tier-1 secondary source and is unverified).",
+      "bron": "Reducto pricing page (Tier 1 for credits; no benchmark/price normalization possible)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "LlamaParse",
+      "provider": "LlamaIndex (LlamaCloud)",
+      "prijs": { "waarde": 3.75, "eenheid": "$/1000 pages", "vergelijkbaar": false },
+      "metrics": { "omnidocbench_composite": null, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": null },
+      "sterk": "Flexible parse modes tuned for RAG at a confirmed $1.25 per 1000 credits: Fast 1 credit (~$1.25/1000 pages), Cost-effective 3 credits (~$3.75/1000), Agentic 10 credits (~$12.50/1000) and Agentic Plus 45 credits (~$56.25/1000); strong markdown/JSON, tables and multimodal, 10K free monthly credits and free re-parses of the same file within a 48-hour cache window.",
+      "zwak": "Per-page cost swings 1x-45x by mode, so the $3.75/1000 figure (Cost-effective) is only one tier — flagged vergelijkbaar=false; layout extraction adds +3 credits per page on top. No published OmniDocBench score (null).",
+      "bron": "LlamaIndex/LlamaCloud pricing page & LlamaParse tier docs (Tier 1)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "GLM-OCR",
+      "provider": "Z.ai (Zhipu AI)",
+      "modelFamilie": "glm-ocr / layout_parsing",
+      "prijs": { "waarde": null, "eenheid": "$/1000 pages", "vergelijkbaar": false },
+      "metrics": { "omnidocbench_composite": 95.22, "table_layout_support": true, "handwriting_support": true, "structured_output": true, "max_pages_async": 100 },
+      "sterk": "Highest published independent OmniDocBench composite of any hosted API in this table (95.22 on v1.6; Z.ai cites 94.62 on v1.5), callable at api.z.ai/api/paas/v4/layout_parsing with text, markdown and image-link output, HTML table reconstruction and handwriting support; the underlying 0.9B model is also self-hostable, and throughput is quoted at 1.86 PDF pages/second.",
+      "zwak": "Priced per token ($0.03 per million tokens for both input and output), not per page, so no comparable $/1000-pages rate exists without estimating — excluded from the price axis. Tight caps (100 pages per document, PDF 50MB, single image 10MB) rule it out for large documents, the documented language list is narrower than the hyperscalers', and China-hosted inference may raise data-residency questions for EU/US buyers.",
+      "bron": "Z.AI developer docs for GLM-OCR (Tier 1 for price and limits); OmniDocBench v1.6 leaderboard (Tier 2); vendor's own 94.62 v1.5 figure self-reported (Tier 3)",
+      "bron_datum": "2026-08-20"
+    }
+  ],
+  "bronnen": [
+    { "titel": "Mistral Pricing", "url": "https://mistral.ai/pricing/", "datum": "2026-08-20" },
+    { "titel": "Mistral API Pricing (OCR tiers)", "url": "https://mistral.ai/pricing/api", "datum": "2026-08-20" },
+    { "titel": "Mistral OCR 4 — SOTA OCR for Document Intelligence", "url": "https://mistral.ai/news/ocr-4/", "datum": "2026-08-20" },
+    { "titel": "Mistral OCR 4.1 model card", "url": "https://docs.mistral.ai/models/ocr-4-1", "datum": "2026-08-20" },
+    { "titel": "CodeSOTA — OmniDocBench Leaderboard", "url": "https://www.codesota.com/ocr/benchmark/omnidocbench", "datum": "2026-08-20" },
+    { "titel": "OmniDocBench (CVPR 2025) — opendatalab", "url": "https://github.com/opendatalab/OmniDocBench", "datum": "2026-08-20" },
+    { "titel": "Google Cloud Document AI Pricing", "url": "https://cloud.google.com/document-ai/pricing", "datum": "2026-06-22" },
+    { "titel": "AWS Textract Pricing", "url": "https://aws.amazon.com/textract/pricing/", "datum": "2026-08-20" },
+    { "titel": "AWS Textract — Set Quotas", "url": "https://docs.aws.amazon.com/textract/latest/dg/limits-document.html", "datum": "2026-08-20" },
+    { "titel": "Azure Document Intelligence Pricing", "url": "https://azure.microsoft.com/en-us/pricing/details/document-intelligence/", "datum": "2026-06-22" },
+    { "titel": "Reducto Pricing", "url": "https://reducto.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "LlamaParse / LlamaIndex Pricing", "url": "https://www.llamaindex.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "LlamaParse Pricing — tiers & credits", "url": "https://developers.llamaindex.ai/llamaparse/general/pricing/", "datum": "2026-08-20" },
+    { "titel": "GLM-OCR — Z.AI Developer Docs", "url": "https://docs.z.ai/guides/vlm/glm-ocr", "datum": "2026-08-20" }
+  ],
+  "queries": {
+    "best-ocr-api-for-invoices": {
+      "query": "Best OCR API for scanned invoices and receipts",
+      "hap": "For scanned invoices and receipts (noisy layouts, tables, key-value fields) Azure Document Intelligence is the strongest default: mature prebuilt invoice and receipt models with JSON output, from $1.50 per 1000 pages for basic Read OCR. Google Document AI and AWS Textract sit at the same $1.50 entry price with strong form and table parsing; Mistral OCR 4 is the markdown-pipeline alternative with HTML-table output and confidence scores. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "Azure Document Intelligence (Read)",
+        "axes": {
+          "prijs": "Google Document AI (Enterprise Document OCR)",
+          "tabel_layout": "Mistral OCR 4"
+        }
+      }
+    },
+    "best-ocr-api": {
+      "query": "Best OCR API for document extraction",
+      "hap": "For turning PDFs and images into structured text, Mistral OCR 4 is the strongest general-purpose default: markdown output with bounding boxes, block labels and confidence scores across 170 languages, now the priciest comparable row at $4 per 1000 pages. Google, AWS and Azure remain the mature enterprise choices, GLM-OCR leads the independent benchmark but is priced per token, and Reducto and LlamaParse target hard, messy documents. A light estimate, August 2026; Google and Azure prices carry over from June.",
+      "recommendation": {
+        "default": "Mistral OCR 4",
+        "axes": {
+          "prijs": "Google Document AI (Enterprise Document OCR)",
+          "benchmark_score": "GLM-OCR",
+          "max_grootte_async": "AWS Textract (DetectDocumentText)"
+        }
+      }
+    },
+    "cheapest-ocr-api": {
+      "query": "Cheapest OCR API",
+      "hap": "On the basic OCR tier, Google Document AI, AWS Textract and Azure Document Intelligence are the cheapest options at $1.50 per 1000 pages, well below Mistral OCR 4 at $4 (halved on its batch API). Credit-priced Reducto, mode-priced LlamaParse and token-priced GLM-OCR are excluded as non-comparable. Table, form and layout extraction cost five to thirty times more, so the basic rate understates cost. AWS re-verified August 2026; Google and Azure figures date from June. A light estimate.",
+      "recommendation": { "default": "Google Document AI (Enterprise Document OCR)", "axes": { "prijs": "Google Document AI (Enterprise Document OCR)" } }
+    },
+    "most-accurate-ocr-api": {
+      "query": "OCR API with a published accuracy benchmark",
+      "hap": "GLM-OCR has the highest published independent OmniDocBench composite among the hosted APIs here (95.22 on v1.6), ahead of the untagged Mistral OCR entry at 85.66, which predates the OCR 4 release (Mistral self-reports 93.07, unverified). The other hosted APIs publish no independent score, so their cells stay blank. With only two data points on a saturated Tier-2 benchmark led by open self-hostable models, treat this as a weak signal, not a verdict. A light estimate, August 2026.",
+      "recommendation": { "default": "GLM-OCR", "axes": { "benchmark_score": "GLM-OCR" } }
+    },
+    "ocr-api-for-large-documents": {
+      "query": "OCR API for large documents",
+      "hap": "For large documents, AWS Textract handles the biggest jobs asynchronously — up to 3000 pages and 500MB per PDF or TIFF, re-verified against the quota docs in August 2026 — ahead of Azure (around 2000) and Google (around 200). Mistral caps around 1000 pages and GLM-OCR at 100. These are documented async limits, not throughput or accuracy measures, and structured extraction tiers carry separate costs. A light estimate from provider documentation.",
+      "recommendation": { "default": "AWS Textract (DetectDocumentText)", "axes": { "max_grootte_async": "AWS Textract (DetectDocumentText)" } }
+    }
+  }
+}

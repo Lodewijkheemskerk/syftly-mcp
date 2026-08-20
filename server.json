@@ -1,0 +1,13 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Lodewijkheemskerk/syftly",
+  "title": "Syftly",
+  "description": "Picks the best AI API for transcription, text-to-speech, web search, scraping or OCR. Free, no auth.",
+  "version": "0.1.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://syftly.vercel.app/api/mcp"
+    }
+  ]
+}

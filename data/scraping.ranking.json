@@ -1,0 +1,155 @@
+{
+  "category": "scraping",
+  "label": "Scraping & browser",
+  "insluit_regel": "Hosted, commercially callable scraping or browser-automation APIs with broad adoption, one row per flagship offering from a distinct provider.",
+  "zekerheidslabel": "light estimate",
+  "laatst_bijgewerkt": "2026-08-20",
+  "assen": [
+    { "key": "prijs", "label": "the lowest price", "metric": "prijs", "richting": "min", "kolom": "Price", "keywords": ["price", "pricing", "cheapest", "cost per request", "per 1000", "prijs", "kosten", "budget", "goedkoopste", "tarief"] },
+    { "key": "js_rendering", "label": "JavaScript rendering", "richting": "filter", "metric": "js_rendering", "keywords": ["javascript rendering", "js render", "headless browser", "dynamic content", "js-rendering", "dynamische content", "headless"] },
+    { "key": "unblocking", "label": "the strongest anti-bot unblocking", "richting": "max", "metric": "unblocking_strength_score", "keywords": ["anti-bot", "unblocker", "proxy", "captcha", "cloudflare", "datadome", "bypass", "residential proxy", "unblocking", "ontwijken", "proxynetwerk"], "caveat": "Unblocking strength is an ordinal Syftly coding (high=3/medium=2/low=1) from the sources, not a measured number." },
+    { "key": "succesratio", "label": "the highest success rate", "richting": "max", "metric": "success_rate", "kolom": "Success", "eenheid": "%", "keywords": ["success rate", "reliable", "reliability", "succesratio", "betrouwbaarheid", "geslaagde requests", "highest success"], "caveat": "Success rates are the weakest figures here: target-dependent, never first-hand, and contradictory between benchmarks." },
+    { "key": "llm_output", "label": "LLM-ready structured output", "richting": "filter", "metric": "llm_ready_output", "kolom": "LLM-ready", "keywords": ["markdown", "structured output", "json extraction", "llm-ready", "llm ready", "schema extraction", "ai extraction", "gestructureerde output", "schema"] },
+    { "key": "browser_automation", "label": "full browser automation", "richting": "filter", "metric": "full_browser_automation", "kolom": "browser", "keywords": ["browser automation", "playwright", "puppeteer", "navigate", "browser-automatisering", "click through", "automate browser"] }
+  ],
+  "providers": [
+    {
+      "naam": "Web Unlocker",
+      "provider": "Bright Data",
+      "modelFamilie": "Unlocking API",
+      "prijs": { "waarde": 1.5, "eenheid": "$/1000 requests", "vergelijkbaar": true },
+      "metrics": { "js_rendering": true, "unblocking_strength": "high", "unblocking_strength_score": 3, "success_rate": 98.44, "llm_ready_output": false, "full_browser_automation": false },
+      "sterk": "Highest independently-measured success rate (98.44% in Scrape.do's benchmark of 11 providers) on heavily protected sites, with pay-per-success billing and the largest proxy network.",
+      "zwak": "Returns raw HTML, not LLM-ready markdown/JSON; the effective per-request price varies by plan and target (ScrapeCreators cites $0.75-$2.50/1000) and the success rate comes from a benchmark published by a competitor (Scrape.do).",
+      "bron": "Tier 1: brightdata.com/pricing/web-unlocker ($1.50/1000 PAYG; Scale $499/mo for 383k requests = $1.30/1000; 5000 free requests/month). Tier 2: Scrape.do benchmark via scrapecreators.com (98.44%).",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Zyte API",
+      "provider": "Zyte",
+      "modelFamilie": "Zyte API",
+      "prijs": { "waarde": 1.0, "eenheid": "$/1000 requests", "vergelijkbaar": false },
+      "metrics": { "js_rendering": true, "unblocking_strength": "high", "unblocking_strength_score": 3, "success_rate": 93.14, "llm_ready_output": true, "full_browser_automation": true },
+      "sterk": "Top score (93.14%) in Proxyway's independent 2025 benchmark across 15 heavily protected sites; pays only for successful responses and offers AI-driven automatic extraction to structured data.",
+      "zwak": "Price is strongly tier-dependent: HTTP $0.13-$1.27/1000, browser rendering $1.01-$16.08/1000, plus separate extraction fees — so it is not directly comparable (the value is a light estimate for an average target). As of August 2026 Zyte no longer publishes tier pricing publicly (login-gated cost estimator), so these June 2026 figures can no longer be re-verified from the page.",
+      "bron": "Tier 1: docs.zyte.com/zyte-api/pricing (HTTP $0.13-$1.27/1000, browser $1.01-$16.08/1000). Tier 2: Proxyway 2025 benchmark (93.14%).",
+      "bron_datum": "2026-06-22"
+    },
+    {
+      "naam": "Firecrawl",
+      "provider": "Firecrawl",
+      "modelFamilie": "Scrape/Crawl/Extract API",
+      "prijs": { "waarde": 0.83, "eenheid": "$/1000 requests", "vergelijkbaar": true },
+      "metrics": { "js_rendering": true, "unblocking_strength": "medium", "unblocking_strength_score": 2, "success_rate": 69, "llm_ready_output": true, "full_browser_automation": true },
+      "sterk": "Strongest LLM-ready output (direct markdown/JSON with schema extraction), cheap per page ($0.00083/page on Standard) and 69% success in Scrapeway's August 2026 test — better than ScrapingBee (48%) in that same test.",
+      "zwak": "Lower reliability on heavily protected sites than the unblocking specialists; Stealth Mode and /extract can cost up to ~5 credits per request, sharply raising the effective price (the pricing page lists only the 1 credit/page base rate, so the stealth multiplier is not vendor-confirmed).",
+      "bron": "Tier 1: firecrawl.dev/pricing (Standard $83/mo billed yearly = 100k credits -> $0.83/1000 pages; scrape/crawl/map 1 credit per page). Tier 2: scrapeway.com benchmark run 8-14 Aug 2026 (69%, 4.1s).",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "ScrapingBee",
+      "provider": "ScrapingBee",
+      "modelFamilie": "Web Scraping API",
+      "prijs": { "waarde": 0.099, "eenheid": "$/1000 requests", "vergelijkbaar": false },
+      "metrics": { "js_rendering": true, "unblocking_strength": "medium", "unblocking_strength_score": 2, "success_rate": null, "llm_ready_output": true, "full_browser_automation": false },
+      "sterk": "Cheapest base rate in the field ($0.099/1000 base requests on Startup) and offers AI extraction; simple API with good docs.",
+      "zwak": "JS rendering is on by default and costs 5 credits (premium proxy 10, premium+JS 25, stealth proxy 75), so real cost is far higher — hence not comparable; success rate is heavily disputed between benchmarks (84.47% at Proxyway 2025 vs 48% at Scrapeway August 2026), so left null.",
+      "bron": "Tier 1: scrapingbee.com/pricing (Startup $99.99/mo = 1M credits -> $0.099/1000 base) and help.scrapingbee.com credit-system article (JS 5, premium 10, premium+JS 25, stealth 75 credits). Tier 2: Proxyway 2025 (84.47%) and Scrapeway August 2026 (48%) — mutually contradictory.",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "ScraperAPI",
+      "provider": "ScraperAPI",
+      "modelFamilie": "Scraper API",
+      "prijs": { "waarde": 0.149, "eenheid": "$/1000 requests", "vergelijkbaar": false },
+      "metrics": { "js_rendering": true, "unblocking_strength": "medium", "unblocking_strength_score": 2, "success_rate": 68.95, "llm_ready_output": false, "full_browser_automation": false },
+      "sterk": "Low base rate (~$0.149/1000 credits on Startup) with a simple proxy+rendering API and a generous free tier (1000 credits/month).",
+      "zwak": "Lowest independent success rate of the tested set on protected sites (68.95% at Proxyway 2025); credits add up fast (JS 5-10x, anti-bot +10, Google 25, LinkedIn 30) so price is not comparable; barely any LLM-ready output.",
+      "bron": "Tier 1: scraperapi.com/pricing (Startup $149/1M credits -> $0.149/1000 base). Tier 2: Proxyway 2025 benchmark (68.95%).",
+      "bron_datum": "2026-06-22"
+    },
+    {
+      "naam": "Apify (Web Scraping platform)",
+      "provider": "Apify",
+      "modelFamilie": "Actors / Compute Units",
+      "prijs": { "waarde": 0.5, "eenheid": "$/1000 requests", "vergelijkbaar": false },
+      "metrics": { "js_rendering": true, "unblocking_strength": "medium", "unblocking_strength_score": 2, "success_rate": null, "llm_ready_output": true, "full_browser_automation": true },
+      "sterk": "Broadest platform: 61,000+ ready-made Actors, full browser automation (Playwright/Puppeteer) and LLM-ready crawlers (Website Content Crawler -> markdown); free tier with $5 credits/month.",
+      "zwak": "Price is Compute-Unit-/Actor-dependent and therefore unpredictable (~$0.20/1000 via HTTP up to $0.50-$5.00/1000 with a browser, plus separate proxy and data-transfer fees) — not comparable as a fixed per-request price; no independent aggregate success rate, as results vary per Actor.",
+      "bron": "Tier 1: apify.com/pricing (Starter $29/mo incl. $29 credits, $0.20/CU; 1 CU = 1 GB-hour) and apify.com/apify/website-content-crawler ($0.20/1000 pages raw HTTP, $0.50-$5/1000 headless browser). No independent platform-level success benchmark.",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Browserbase",
+      "provider": "Browserbase",
+      "modelFamilie": "Cloud browser infrastructure",
+      "prijs": { "waarde": 0.05, "eenheid": "$/1000 requests", "vergelijkbaar": false },
+      "metrics": { "js_rendering": true, "unblocking_strength": "low", "unblocking_strength_score": 1, "success_rate": null, "llm_ready_output": false, "full_browser_automation": true },
+      "sterk": "Pure cloud-browser infrastructure built for AI agents: full programmable browser automation (Playwright/Puppeteer/CDP), per-hour billing and 25 concurrent browsers from $20/month (100 concurrent on the $99 Startup plan).",
+      "zwak": "No ready-made unblocking/anti-bot layer or LLM-ready extraction (raw browser output); billing per browser-hour ($0.10-$0.12/hour) + proxy per GB does not convert to per-request — the $0.05/1000 is a rough light estimate and therefore not comparable; no independent success benchmark.",
+      "bron": "Tier 1: docs.browserbase.com/guides/plans-and-pricing (Developer $20/mo, 100 browser-hours, 25 concurrent, $0.12/hour overage; 1 GB proxy included then $12/GB. Startup $99/mo, 500 hours, 100 concurrent, $0.10/hour). Per-request price is a derived light estimate.",
+      "bron_datum": "2026-08-20"
+    }
+  ],
+  "bronnen": [
+    { "titel": "Bright Data — Web Unlocker pricing", "url": "https://brightdata.com/pricing/web-unlocker", "datum": "2026-08-20" },
+    { "titel": "Zyte API pricing — Zyte documentation", "url": "https://docs.zyte.com/zyte-api/pricing.html", "datum": "2026-06-22" },
+    { "titel": "Firecrawl pricing", "url": "https://www.firecrawl.dev/pricing", "datum": "2026-08-20" },
+    { "titel": "ScrapingBee pricing", "url": "https://www.scrapingbee.com/pricing/", "datum": "2026-08-20" },
+    { "titel": "ScrapingBee — Credit system explained (knowledge base)", "url": "https://help.scrapingbee.com/en/article/credit-system-explained-1h2ackp/", "datum": "2026-08-20" },
+    { "titel": "ScraperAPI pricing", "url": "https://www.scraperapi.com/pricing/", "datum": "2026-06-22" },
+    { "titel": "Apify pricing", "url": "https://apify.com/pricing", "datum": "2026-08-20" },
+    { "titel": "Apify Store (Actor count)", "url": "https://apify.com/store", "datum": "2026-08-20" },
+    { "titel": "Browserbase — Plans and Pricing (docs)", "url": "https://docs.browserbase.com/guides/plans-and-pricing", "datum": "2026-08-20" },
+    { "titel": "Proxyway — Web Scraping API Report 2025 (independent benchmark, 15 protected sites, tested October 2025)", "url": "https://proxyway.com/research/web-scraping-api-report-2025", "datum": "2026-08-20" },
+    { "titel": "Scrapeway — ScrapingBee vs Firecrawl benchmark (run 8-14 Aug 2026)", "url": "https://scrapeway.com/web-scraping-api/scrapingbee/vs/firecrawl", "datum": "2026-08-20" },
+    { "titel": "ScrapeCreators — Best Web Scraping APIs 2026 (aggregator, updated 31 May 2026)", "url": "https://scrapecreators.com/blog/web-scraping-apis", "datum": "2026-08-20" }
+  ],
+  "queries": {
+    "best-web-scraping-api-for-article-extraction": {
+      "query": "Best web scraping API for article extraction",
+      "hap": "For pulling clean article text from news sites and blogs, Firecrawl is the strongest default: direct markdown and JSON output with schema extraction, priced at $0.83 per 1000 requests on its Standard plan. When articles sit behind heavy anti-bot protection, Bright Data's Web Unlocker at $1.50 per 1000 requests had the highest independently-reported success rate; Zyte API adds AI-driven automatic extraction to structured data. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "Firecrawl",
+        "axes": {
+          "prijs": "Firecrawl",
+          "unblocking": "Web Unlocker"
+        }
+      }
+    },
+    "best-web-scraping-api": {
+      "query": "Best web scraping API",
+      "hap": "Web scraping splits by job. For blocked, anti-bot-heavy sites, Bright Data's Web Unlocker had the highest independently-reported success rate and the strongest unblocking, and is the safe default. Firecrawl is the cheapest comparable per-request rate and purpose-built for LLM-ready content; Zyte adds full browser automation with clean structured output. Pricing models differ wildly and success rates conflict between benchmarks, so this is a light estimate, August 2026.",
+      "recommendation": {
+        "default": "Web Unlocker",
+        "axes": {
+          "prijs": "Firecrawl",
+          "unblocking": "Web Unlocker",
+          "succesratio": "Web Unlocker",
+          "llm_output": "Zyte API"
+        }
+      }
+    },
+    "cheapest-web-scraping-api": {
+      "query": "Cheapest web scraping API",
+      "hap": "Among providers with a clean, comparable per-request price, Firecrawl is the cheapest at about $0.83 per 1000 pages, ahead of Bright Data's Web Unlocker (around $1.50). The lower headline rates from ScrapingBee, ScraperAPI, Apify and Browserbase are credit- or compute-priced with multipliers (JS rendering alone can cost 5x), so they are not directly comparable and are excluded. A light estimate from provider pricing pages, August 2026.",
+      "recommendation": { "default": "Firecrawl", "axes": { "prijs": "Firecrawl" } }
+    },
+    "best-web-scraping-api-for-blocked-sites": {
+      "query": "Best web scraping API for blocked and anti-bot sites",
+      "hap": "For heavily protected, anti-bot sites, Bright Data's Web Unlocker leads on both unblocking strength and the highest independently-reported success rate (98.44%), ahead of Zyte (93.14%). Treat success rates as the weakest figures here: they are target-dependent, conflict sharply between benchmarks (ScrapingBee's reported rate differs widely across two separate tests), and Bright Data's number comes from a competitor-published benchmark. A light estimate, not a first-hand measurement.",
+      "recommendation": {
+        "default": "Web Unlocker",
+        "axes": {
+          "unblocking": "Web Unlocker",
+          "succesratio": "Web Unlocker"
+        }
+      }
+    },
+    "web-scraping-api-with-llm-ready-output": {
+      "query": "Web scraping API with LLM-ready output",
+      "hap": "For output you can hand straight to an LLM, Zyte is the highest-ranked option that returns clean structured data with AI-driven extraction, and Firecrawl is purpose-built for it with direct markdown and JSON plus schema extraction. ScrapingBee and Apify also offer AI extraction, while Bright Data and ScraperAPI return raw HTML. A light estimate from provider documentation, June 2026.",
+      "recommendation": { "default": "Zyte API", "axes": { "llm_output": "Zyte API" } }
+    }
+  }
+}

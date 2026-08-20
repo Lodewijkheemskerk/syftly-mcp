@@ -1,0 +1,170 @@
+{
+  "category": "tts",
+  "label": "Text-to-speech",
+  "insluit_regel": "Hosted, commercially callable text-to-speech APIs from distinct providers, each present in a recognized independent benchmark (Artificial Analysis Speech Arena and/or Coval latency benchmark) or with top production adoption, one row per flagship model tier.",
+  "zekerheidslabel": "light estimate",
+  "laatst_bijgewerkt": "2026-08-20",
+  "assen": [
+    { "key": "goedkoopste", "label": "the lowest price", "metric": "prijs", "richting": "min", "kolom": "Price", "keywords": ["cheapest", "goedkoopste", "lowest cost", "least expensive", "cheap", "budget", "lowest price", "per character", "per 1m characters", "prijs", "kosten", "betaalbaar"], "caveat": "Only clean per-character prices are ranked; token-/credit-priced offerings are shown but excluded, as their per-character cost is only an estimate." },
+    { "key": "natuurlijkste", "label": "the most natural voice", "metric": "arena_elo", "richting": "max", "kolom": "ELO", "keywords": ["natural", "naturalness", "human-like", "realistic", "expressive", "arena", "natuurlijk", "menselijk", "realistisch", "expressief", "stemkwaliteit"], "caveat": "Arena ELO is a weekly blind-vote score; treat it as rank-order, not an exact value." },
+    { "key": "snelste", "label": "the lowest latency", "metric": "ttfa_p50_ms", "richting": "min", "kolom": "TTFA", "eenheid": " ms", "keywords": ["latency", "fast", "real-time", "realtime", "time to first audio", "ttfa", "streaming latency", "snel", "latentie", "responstijd", "lage vertraging"], "caveat": "Latency is the independent Coval P50, materially slower than vendors' own optimized claims." },
+    { "key": "meeste_talen", "label": "the broadest language coverage", "metric": "languages_supported", "richting": "max", "kolom": "Langs", "keywords": ["languages", "multilingual", "language coverage", "locales", "talen", "meertalig", "taaldekking", "internationaal"], "caveat": "Language counts mix documentation and marketing and vary by version." },
+    { "key": "streaming", "label": "streaming support", "metric": "streaming", "richting": "filter", "kolom": "streaming", "keywords": ["streaming", "chunked", "websocket", "real-time stream", "low-latency stream", "streamen", "streaming-ondersteuning"] },
+    { "key": "stemklonen", "label": "voice cloning", "metric": "voice_cloning", "richting": "filter", "kolom": "cloning", "keywords": ["voice cloning", "clone", "custom voice", "voice design", "instant voice clone", "stem klonen", "stemkloon", "aangepaste stem", "eigen stem"] }
+  ],
+  "providers": [
+    {
+      "naam": "ElevenLabs Multilingual v2 / Eleven v3",
+      "provider": "ElevenLabs",
+      "modelFamilie": "Eleven Multilingual v2 / Eleven v3",
+      "prijs": { "waarde": 100, "eenheid": "$/1M chars", "vergelijkbaar": true },
+      "metrics": { "arena_elo": 1179, "ttfa_p50_ms": 653, "languages_supported": 29, "streaming": true, "voice_cloning": true },
+      "sterk": "Largest production adoption and most mature voice-library/cloning ecosystem, with both instant and professional cloning; Eleven v3 is the strongest ElevenLabs model on the Artificial Analysis Speech Arena at 1179 ELO (rank 12 of 99).",
+      "zwak": "Most expensive per-character of the comparable group ($100/1M chars at $0.10/1K, charged for both Eleven v3 and Multilingual v2); the $0.05/1K Flash/Turbo and v3 Conversational tiers are cheaper but different models. Independent Coval TTFA is slow for the flagship tiers: 653ms P50 for Eleven v3 and 1262ms for Multilingual v2, against 212ms for the cheaper Flash v2.5 — the 264ms previously listed here was a Turbo v2.5 figure, not a flagship one. Language counts differ per model on the pricing page (29 for Multilingual v2, 32 for Flash/Turbo, 70+ for Eleven v3); the 29 shown is the Multilingual v2 figure. Multilingual v2 ranks only 33rd on the Arena (1104 ELO).",
+      "bron": "elevenlabs.io/pricing/api ($0.10/1K for v3 and v2 Multilingual, per-model language counts, voice library/cloning); Artificial Analysis Speech Arena provider-voice leaderboard (Eleven v3 1179 ELO rank 12; Multilingual v2 1104 ELO rank 33); Coval TTS benchmark via Openbenchmarks, rolling 7-day window pulled 2026-08-20 (eleven_v3 653ms P50, eleven_multilingual_v2 1262ms P50, eleven_flash_v2_5 212ms P50)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Cartesia Sonic 3 / Sonic 3.5",
+      "provider": "Cartesia",
+      "modelFamilie": "Sonic 3 / Sonic 3.5",
+      "prijs": { "waarde": 39, "eenheid": "$/1M chars", "vergelijkbaar": false },
+      "metrics": { "arena_elo": 1203, "ttfa_p50_ms": 271, "languages_supported": 42, "streaming": true, "voice_cloning": true },
+      "sterk": "Lowest independently-measured time-to-first-audio in this table (271ms P50 for Sonic 3.5 in the Coval benchmark), and Cartesia's newer Sonic 3.6 — beta, API-only, released 2026-08-18 — currently leads the entire Artificial Analysis Speech Arena at 1285 ELO.",
+      "zwak": "Price is credit-/plan-based and the pricing page now states allowances in minutes of audio rather than characters, publishing no per-character rate at all; the ~$39/1M figure is derived from the $49/month Startup tier, so vergelijkbaar=false. Vendor latency claims (~90ms, 'sub-90ms' for 3.6) are roughly three times better than the measured 271ms P50. Sonic 3.5 slipped from about 4th to 7th on the Arena at an unchanged 1203 ELO; Sonic 3.6's much higher score is deliberately not used for this row, because 3.6 is still beta while the docs list 3.5 as stable and priced. The 42-language count carries over from the previous snapshot and was not re-verified in this refresh.",
+      "bron": "cartesia.ai/pricing (plan tiers $0/$5/$49/$299, minutes-based allowances, instant cloning from Pro and professional cloning from Startup); Artificial Analysis Speech Arena provider-voice leaderboard (Sonic 3.5 1203 ELO rank 7; Sonic 3.6 1285 ELO rank 1); Coval TTS benchmark via Openbenchmarks pulled 2026-08-20 (sonic-3.5 271ms P50); MarkTechPost 2026-08-18 (Sonic 3.6 launch and beta status)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Google Gemini 3.1 Flash TTS",
+      "provider": "Google",
+      "modelFamilie": "Gemini 3.1 Flash TTS",
+      "prijs": { "waarde": 12, "eenheid": "$/1M chars", "vergelijkbaar": false },
+      "metrics": { "arena_elo": 1212, "ttfa_p50_ms": null, "languages_supported": null, "streaming": true, "voice_cloning": false },
+      "sterk": "Highest-scoring row in this table on the Artificial Analysis Speech Arena (1212 ELO, rank 5 of 99), combined with a low effective per-character cost.",
+      "zwak": "Token-based pricing (unchanged at $1/1M input text tokens + $20/1M audio output tokens, billed at 25 audio tokens per second); the ~$12/1M-chars figure is a third-party conversion estimate, not a provider per-character rate, so vergelijkbaar=false. Still labelled a Preview model on Google's own pricing page, with more restrictive rate limits. No independent TTFA: Gemini TTS is absent from the Coval benchmark, where Google appears only as chirp-3-hd at 484ms P50. No native voice cloning.",
+      "bron": "ai.google.dev/gemini-api/docs/pricing ($1/1M text input + $20/1M audio output, Preview status); Artificial Analysis Speech Arena provider-voice leaderboard (Gemini 3.1 Flash TTS 1212 ELO, rank 5)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "OpenAI gpt-4o-mini-tts",
+      "provider": "OpenAI",
+      "modelFamilie": "gpt-4o-mini-tts",
+      "prijs": { "waarde": 15, "eenheid": "$/1M chars", "vergelijkbaar": false },
+      "metrics": { "arena_elo": null, "ttfa_p50_ms": 775, "languages_supported": 50, "streaming": true, "voice_cloning": false },
+      "sterk": "Cheap, developer-friendly, with steerable tone/emotion via a free-text 'instructions' parameter and tight integration into the OpenAI stack; ~11-13 built-in voices.",
+      "zwak": "Token-based pricing (unchanged at $0.60/1M text input tokens + $12/1M audio output tokens); the ~$15/1M-chars figure is a community estimate, so vergelijkbaar=false — note OpenAI's older tts-1 is separately listed at a real $15/1M characters, which is easy to confuse with it. Not ranked on the Arena: gpt-4o-mini-tts does not appear among the 99 leaderboard models, where OpenAI is represented only by tts-1, tts-1-hd and GPT-Realtime-2. Independent Coval TTFA is 775ms P50, the slowest in this table apart from ElevenLabs Multilingual v2. The ~50-language claim is vendor-stated and was not re-verified in this refresh. No voice cloning.",
+      "bron": "developers.openai.com/api/docs/pricing ($0.60/1M text input + $12/1M audio output; tts-1 $15/1M chars, tts-1-hd $30/1M chars); community pricing threads (~$15/1M chars estimate); vendor docs (~50 languages, not re-verified); Coval TTS benchmark via Openbenchmarks pulled 2026-08-20 (gpt-4o-mini-tts 775ms P50)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "MiniMax Speech 2.5 Turbo",
+      "provider": "MiniMax",
+      "modelFamilie": "Speech 2.5 Turbo / 2.5 HD",
+      "prijs": { "waarde": 78, "eenheid": "$/1M chars", "vergelijkbaar": true },
+      "metrics": { "arena_elo": null, "ttfa_p50_ms": null, "languages_supported": null, "streaming": true, "voice_cloning": true },
+      "sterk": "Strong multilingual quality with accurate voice replication; the HD tier ranks in the upper part of the Artificial Analysis Speech Arena, and pricing is clean per-character.",
+      "zwak": "Per-character pricing differs sharply by tier: Turbo ~$78/1M vs HD ~$130/1M, and the ELO-ranked variant is the more expensive HD model — so the cheapest tier and the benchmarked tier are not the same. No independent TTFA; flagship-specific ELO and language count not confirmed (left null).",
+      "bron": "platform.minimax.io/docs/pricing + pricepertoken (Turbo $0.078/1K, HD $0.13/1K); Artificial Analysis Speech Arena (MiniMax HD in top positions)",
+      "bron_datum": "2026-06-22"
+    },
+    {
+      "naam": "Deepgram Aura-2",
+      "provider": "Deepgram",
+      "modelFamilie": "Aura-2",
+      "prijs": { "waarde": 30, "eenheid": "$/1M chars", "vergelijkbaar": true },
+      "metrics": { "arena_elo": null, "ttfa_p50_ms": 293, "languages_supported": 7, "streaming": true, "voice_cloning": false },
+      "sterk": "Low, clean per-character price (unchanged at $0.030/1K, $0.027/1K at Growth tier) aimed at voice-agent/IVR workloads with streaming and a large English voice catalog (40+ EN voices).",
+      "zwak": "Narrow language coverage, confirmed in the docs at 7 (EN, ES, NL, FR, DE, IT, JA). Independent Coval TTFA improved from 313ms to 293ms P50 — second-best in this table behind Cartesia — but still far off the vendor's '90ms' claim. Aura-2 itself is unranked on the Speech Arena, so naturalness ELO is left null; Deepgram's newer Flux TTS does appear but only at rank 59 (1054 ELO) and costs more at $0.045/1K after a free period ending 2026-09-12. No voice cloning.",
+      "bron": "deepgram.com/pricing (Aura-2 $0.030/1K PAYG and $0.027/1K Growth; Flux TTS $0.045/1K); developers.deepgram.com/docs/tts-models (7 languages); Artificial Analysis Speech Arena provider-voice leaderboard (Aura-2 unranked; Flux TTS 1054 ELO rank 59); Coval TTS benchmark via Openbenchmarks pulled 2026-08-20 (aura-2-thalia-en 293ms P50)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "SpeechifyAI Simba 3.2",
+      "provider": "Speechify",
+      "modelFamilie": "simba-3.2",
+      "prijs": { "waarde": 10.0, "eenheid": "$/1M chars", "vergelijkbaar": false },
+      "metrics": { "arena_elo": 1240, "ttfa_p50_ms": 398, "languages_supported": 30, "streaming": true, "voice_cloning": true },
+      "sterk": "Highest-scoring row in this table on the Artificial Analysis Speech Arena (1240 ELO, rank 3 of 99), with low measured latency (398 ms P50 in the Coval capture, 3.4% WER), flat per-character pricing, and streaming, SSML and voice cloning from the entry tier; 50K characters/month free.",
+      "zwak": "Plan-bundled pricing: the $10/1M rate is the Starter overage (Pro $8/1M, Scale $6/1M), so effective cost depends on tier and is marked not directly comparable; the 30+ language count is a platform-wide claim rather than a Simba-specific spec, and the production ecosystem is younger than ElevenLabs'.",
+      "bron": "SpeechifyAI pricing page speechify.ai/pricing (Tier 1); Artificial Analysis Speech Arena rank 3 and Coval/Openbenchmarks latency capture (Tier 2)",
+      "bron_datum": "2026-08-20"
+    }
+  ],
+  "bronnen": [
+    { "titel": "SpeechifyAI — API pricing (TTS tiers)", "url": "https://speechify.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "Artificial Analysis — Text to Speech Leaderboard (Speech Arena provider-voice, blind-vote ELO, 99 models)", "url": "https://artificialanalysis.ai/text-to-speech/leaderboard", "datum": "2026-08-20" },
+    { "titel": "Coval — TTS benchmark data (TTFA P50/P95 and WER, rolling 7-day window on a pinned dataset), mirrored with methodology notes by Openbenchmarks; pulled 2026-08-20 06:30 UTC", "url": "https://openbenchmarks.com/text-to-speech-benchmark-by-coval", "datum": "2026-08-20" },
+    { "titel": "Coval — Best TTS Providers 2026 guide (successor to the 2026-05-04 benchmark post; now carries vendor-claimed latencies only, no benchmark table)", "url": "https://www.coval.ai/blog/best-text-to-speech-providers-in-2026-how-to-choose-(and-why-vendor-benchmarks-lie)/", "datum": "2026-08-20" },
+    { "titel": "ElevenLabs — API Pricing", "url": "https://elevenlabs.io/pricing/api", "datum": "2026-08-20" },
+    { "titel": "Cartesia — Pricing", "url": "https://www.cartesia.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "Google — Gemini Developer API Pricing", "url": "https://ai.google.dev/gemini-api/docs/pricing", "datum": "2026-08-20" },
+    { "titel": "OpenAI — API Pricing (developers.openai.com; the former openai.com/api/pricing/ URL now returns 403)", "url": "https://developers.openai.com/api/docs/pricing", "datum": "2026-08-20" },
+    { "titel": "MiniMax — Product Pricing (API docs)", "url": "https://platform.minimax.io/docs/pricing/overview", "datum": "2026-06-22" },
+    { "titel": "Deepgram — Pricing (Aura-2 and Flux TTS)", "url": "https://deepgram.com/pricing", "datum": "2026-08-20" },
+    { "titel": "Deepgram — TTS model docs (Aura-2 language list)", "url": "https://developers.deepgram.com/docs/tts-models", "datum": "2026-08-20" },
+    { "titel": "MarkTechPost — Cartesia ships Sonic-3.6 (launch date, beta/API-only status)", "url": "https://www.marktechpost.com/2026/08/18/cartesia-ships-sonic-3-6-a-streaming-tts-model-that-now-leads-both-artificial-analysis-speech-arenas/", "datum": "2026-08-20" }
+  ],
+  "queries": {
+    "best-text-to-speech-api-for-phone-ivr": {
+      "query": "Best text-to-speech API for IVR and phone agents",
+      "hap": "For IVR menus and phone agents — where latency and cost per minute dominate — Deepgram Aura-2 is the strongest default: it is aimed squarely at voice-agent and IVR workloads, with streaming, a large English voice catalog, low measured latency (about 293 ms time-to-first-audio) and the cheapest clean per-character rate at $30 per million characters. Cartesia Sonic is the alternative when every millisecond counts, at about 271 ms measured. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "Deepgram Aura-2",
+        "axes": {
+          "goedkoopste": "Deepgram Aura-2",
+          "snelste": "Cartesia Sonic 3 / Sonic 3.5"
+        }
+      }
+    },
+    "best-text-to-speech-api-for-narration": {
+      "query": "Best text-to-speech API for narration and voiceovers",
+      "hap": "For narrating articles, audiobooks and voiceovers, naturalness matters most: SpeechifyAI Simba 3.2 scores highest of this table on the blind-vote Speech Arena, with streaming and voice cloning from its entry tier, making it the strongest default. ElevenLabs is the production-proven alternative with the most mature voice library and cloning ecosystem, at $100 per million characters. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "SpeechifyAI Simba 3.2",
+        "axes": {
+          "natuurlijkste": "SpeechifyAI Simba 3.2",
+          "stemklonen": "ElevenLabs Multilingual v2 / Eleven v3"
+        }
+      }
+    },
+    "best-text-to-speech-api": {
+      "query": "Best text-to-speech API",
+      "hap": "For general text-to-speech there is no single winner. ElevenLabs leads on production adoption and voice-cloning maturity and is a safe default, but is now the slowest of this group on independent latency measurement. SpeechifyAI Simba 3.2 scores highest here on the blind-vote naturalness Arena, Cartesia Sonic 3.5 has the lowest measured latency, and Deepgram Aura-2 is the cheapest clean per-character rate. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "ElevenLabs Multilingual v2 / Eleven v3",
+        "axes": {
+          "goedkoopste": "Deepgram Aura-2",
+          "natuurlijkste": "SpeechifyAI Simba 3.2",
+          "snelste": "Cartesia Sonic 3 / Sonic 3.5",
+          "meeste_talen": "OpenAI gpt-4o-mini-tts"
+        }
+      }
+    },
+    "cheapest-text-to-speech-api": {
+      "query": "Cheapest text-to-speech API",
+      "hap": "Among providers with a directly comparable per-character price, Deepgram Aura-2 is the cheapest at $30 per million characters, ahead of MiniMax Speech 2.5 Turbo ($78) and ElevenLabs ($100). Google Gemini and OpenAI can look cheaper but bill per token, so their per-character figures are estimates and are excluded from this ranking. A light estimate from vendor pricing pages, August 2026; the MiniMax figure dates from June 2026.",
+      "recommendation": { "default": "Deepgram Aura-2", "axes": { "goedkoopste": "Deepgram Aura-2" } }
+    },
+    "most-natural-text-to-speech-voice": {
+      "query": "Most natural text-to-speech voice",
+      "hap": "On the Artificial Analysis Speech Arena, a blind-vote naturalness ranking, SpeechifyAI Simba 3.2 is now the highest-scoring row in this table, ahead of Google Gemini 3.1 Flash TTS and Cartesia Sonic 3.5; OpenAI's gpt-4o-mini-tts and Deepgram's Aura-2 are not ranked. Only Cartesia's beta, API-only Sonic 3.6 scores higher on the full leaderboard. The Arena re-ranks continuously, so read this as rank-order, not exact gaps. A light estimate, August 2026.",
+      "recommendation": { "default": "SpeechifyAI Simba 3.2", "axes": { "natuurlijkste": "SpeechifyAI Simba 3.2" } }
+    },
+    "lowest-latency-text-to-speech-api": {
+      "query": "Lowest latency text-to-speech API",
+      "hap": "In Coval's independent latency benchmark, Cartesia Sonic 3.5 has the lowest time-to-first-audio in this table at about 271 ms (P50), ahead of Deepgram Aura-2 (about 293 ms), ElevenLabs Eleven v3 (about 653 ms) and OpenAI gpt-4o-mini-tts (about 775 ms). Measured medians run well above vendors' optimized marketing claims, so trust the measurement over the spec sheet. Google Gemini TTS and MiniMax are absent from the benchmark. A light estimate from a rolling window, August 2026.",
+      "recommendation": { "default": "Cartesia Sonic 3 / Sonic 3.5", "axes": { "snelste": "Cartesia Sonic 3 / Sonic 3.5" } }
+    },
+    "text-to-speech-api-with-voice-cloning": {
+      "query": "Text-to-speech API with voice cloning",
+      "hap": "For voice cloning, ElevenLabs is the most established option: the largest voice library, the most mature instant and professional cloning workflows, and streaming support. Cartesia offers instant and professional cloning on its paid plans and MiniMax supports voice replication, while Google Gemini and OpenAI's gpt-4o-mini-tts do not clone voices. Pricing and quality differ sharply by tier, so check each provider row. A light estimate from provider documentation, August 2026.",
+      "recommendation": { "default": "ElevenLabs Multilingual v2 / Eleven v3", "axes": { "stemklonen": "ElevenLabs Multilingual v2 / Eleven v3" } }
+    },
+    "most-multilingual-text-to-speech-api": {
+      "query": "Most multilingual text-to-speech API",
+      "hap": "By stated language coverage, OpenAI's gpt-4o-mini-tts is the broadest in this set at around 50 languages, ahead of Cartesia Sonic (42) and ElevenLabs Multilingual v2 (29), while Deepgram Aura-2 covers seven. Counts depend heavily on which tier you buy — ElevenLabs alone lists 29, 32 or 70+ across its models — and mix documentation with marketing, so treat them as indicative. A light estimate, August 2026; OpenAI and Cartesia counts carry over from June.",
+      "recommendation": { "default": "OpenAI gpt-4o-mini-tts", "axes": { "meeste_talen": "OpenAI gpt-4o-mini-tts" } }
+    }
+  }
+}

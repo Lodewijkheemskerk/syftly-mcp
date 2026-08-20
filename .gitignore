@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Editor / OS cruft
+*.swp
+*~
+.idea/
+.vscode/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+coverage/
+.env*.local
+.vercel

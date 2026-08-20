@@ -1,0 +1,261 @@
+{
+  "category": "transcription",
+  "label": "Transcription",
+  "insluit_regel": "Hosted, commercially callable speech-to-text APIs present in a recognized benchmark (Open ASR Leaderboard / Artificial Analysis) or with top adoption, one row per flagship model-tier; self-host/open-weights are out of MVP-1.",
+  "zekerheidslabel": "light estimate",
+  "laatst_bijgewerkt": "2026-08-20",
+  "assen": [
+    { "key": "voor-taal-nl", "label": "Dutch support", "metric": "taal_nl", "richting": "filter", "keywords": ["dutch", "nederlands", "netherlands"], "caveat": "WER is the Artificial Analysis aggregate, which is English-leaning, so treat cross-language accuracy as a light estimate." },
+    { "key": "voor-taal-es", "label": "Spanish support", "metric": "taal_es", "richting": "filter", "keywords": ["spanish", "spaans", "espanol", "español", "castellano"], "caveat": "WER is the Artificial Analysis aggregate, which is English-leaning, so treat cross-language accuracy as a light estimate." },
+    { "key": "met-diarisatie", "label": "speaker diarization", "metric": "diarisatie", "richting": "filter", "keywords": ["diariz", "diaris", "speaker label", "who spoke", "speaker separation"], "kolom": "diarization" },
+    { "key": "met-timestamps", "label": "word-level timestamps", "metric": "word_timestamps", "richting": "filter", "keywords": ["timestamp", "word-level", "word level", "time-aligned", "time aligned"], "kolom": "timestamps" },
+    { "key": "met-custom-vocabulary", "label": "custom vocabulary", "metric": "custom_vocabulary", "richting": "filter", "keywords": ["custom vocab", "vocabulary", "keyterm", "key term", "phrase list", "jargon"], "kolom": "vocab" },
+    { "key": "beste-prijs-kwaliteit", "label": "the best price-to-accuracy ratio", "metric": "waarde_score", "richting": "min", "keywords": ["price-to-accuracy", "price to accuracy", "good accuracy", "best value", "value for", "bang for", "quality for the price"], "caveat": "WER is the Artificial Analysis aggregate, which is English-leaning, so treat cross-language accuracy as a light estimate." },
+    { "key": "hoogste-nauwkeurigheid", "label": "the highest accuracy (lowest WER)", "metric": "wer", "richting": "min", "keywords": ["most accurate", "best accuracy", "highest accuracy", "nauwkeurig", "lowest wer", "accuracy", "accurate"], "caveat": "WER is the Artificial Analysis aggregate, which is English-leaning, so treat cross-language accuracy as a light estimate.", "kolom": "WER", "eenheid": "%" },
+    { "key": "sterkste-meertalig", "label": "the broadest language coverage", "metric": "talen_aantal", "richting": "max", "keywords": ["multilingual", "meertalig", "most languages", "many languages", "language coverage", "languages"], "kolom": "Langs" },
+    { "key": "laagste-latency", "label": "the lowest streaming latency", "metric": "latency_ms", "richting": "min", "keywords": ["latency", "real-time", "realtime", "streaming", "fastest", "low latency", "live"], "caveat": "Latency figures are heterogeneous (P50 vs vendor claims) and not strictly comparable.", "kolom": "Latency", "eenheid": " ms" },
+    { "key": "goedkoopste", "label": "the lowest price", "metric": "prijs", "richting": "min", "keywords": ["cheapest", "goedkoopste", "lowest cost", "least expensive", "cheap", "budget", "lowest price"], "kolom": "Price" }
+  ],
+  "providers": [
+    {
+      "naam": "ElevenLabs Scribe v2",
+      "provider": "ElevenLabs",
+      "modelFamilie": "Scribe",
+      "prijs": { "waarde": 3.67, "eenheid": "$/1000 min", "vergelijkbaar": true },
+      "metrics": { "wer": 2.2, "latency_ms": 150, "talen_aantal": 90, "taal_nl": true, "taal_es": true, "diarisatie": true, "word_timestamps": true, "custom_vocabulary": true, "waarde_score": 8.074 },
+      "sterk": "Highest accuracy on the Artificial Analysis leaderboard (2.2% WER, an English-leaning aggregate); broad language coverage with full diarization, word-level timestamps and custom vocabulary.",
+      "zwak": "Not the cheapest comparable option; low-latency streaming runs on a separate Scribe v2 Realtime mode that is billed higher at $0.39/hr.",
+      "bron": "Artificial Analysis — Speech to Text; ElevenLabs docs",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "AssemblyAI Universal-3 Pro",
+      "provider": "AssemblyAI",
+      "modelFamilie": "Universal",
+      "prijs": { "waarde": 3.50, "eenheid": "$/1000 min", "vergelijkbaar": true },
+      "metrics": { "wer": 3.1, "latency_ms": 150, "talen_aantal": 99, "taal_nl": true, "taal_es": true, "diarisatie": true, "word_timestamps": true, "custom_vocabulary": true, "waarde_score": 10.85 },
+      "sterk": "Cheapest of the directly-comparable dedicated APIs ($3.50/1000 min) with the widest language coverage (99) and full diarization, timestamps and custom vocabulary; ~150 ms P50 streaming.",
+      "zwak": "Accuracy (3.1% WER) trails the leaders; the cheaper legacy Universal-2 tier is less accurate still. AssemblyAI now lists Universal-3.5 Pro as its flagship at the same $3.50/1000 min, but no independent leaderboard score exists for it yet, so the WER here still refers to Universal-3 Pro.",
+      "bron": "Artificial Analysis — Speech to Text; AssemblyAI pricing & docs",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Deepgram Nova-3",
+      "provider": "Deepgram",
+      "modelFamilie": "Nova",
+      "prijs": { "waarde": 4.30, "eenheid": "$/1000 min", "vergelijkbaar": true },
+      "metrics": { "wer": 5.2, "latency_ms": 300, "talen_aantal": 50, "taal_nl": true, "taal_es": true, "diarisatie": true, "word_timestamps": true, "custom_vocabulary": true, "waarde_score": 22.36 },
+      "sterk": "Streaming-focused with per-second billing and full diarization, timestamps and keyterm support; markets sub-300 ms latency.",
+      "zwak": "Lowest accuracy of the group on the leaderboard (5.2% WER); the latency figure is self-reported, not an independent benchmark. Deepgram now positions a separate, dearer Flux model ($0.0077/min list) as its ultra-low-latency option for voice agents.",
+      "bron": "Artificial Analysis — Speech to Text; Deepgram docs & pricing",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Speechmatics Enhanced",
+      "provider": "Speechmatics",
+      "modelFamilie": "Enhanced",
+      "prijs": { "waarde": null, "eenheid": "$/1000 min", "vergelijkbaar": false },
+      "metrics": { "wer": 4.0, "latency_ms": 500, "talen_aantal": 70, "taal_nl": true, "taal_es": true, "diarisatie": true, "word_timestamps": true, "custom_vocabulary": true, "waarde_score": null },
+      "sterk": "Long-standing broad multilingual coverage (~70 languages) with diarization, timestamps and a custom dictionary.",
+      "zwak": "Vendor no longer publishes per-model rates (the pricing page defers to a portal), so the June 2026 $6.70/1000 min could not be re-verified and third-party figures conflict up to 2-3x higher; the price is therefore marked not comparable. Mid-pack accuracy (4.0% WER).",
+      "bron": "Artificial Analysis — Speech to Text (Tier 2); Speechmatics pricing page no longer publishes per-model rates (checked 2026-08-20)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "OpenAI gpt-transcribe",
+      "provider": "OpenAI",
+      "modelFamilie": "GPT",
+      "prijs": { "waarde": 4.50, "eenheid": "$/1000 min", "vergelijkbaar": true },
+      "metrics": { "wer": 3.3, "latency_ms": null, "talen_aantal": null, "taal_nl": true, "taal_es": true, "diarisatie": false, "word_timestamps": false, "custom_vocabulary": true, "waarde_score": 14.85 },
+      "sterk": "OpenAI's current recommended transcription model: both cheaper ($4.50/1000 min) and more accurate (3.3% WER) than the gpt-4o-transcribe tier it supersedes, with a keywords parameter for biasing terms.",
+      "zwak": "Returns plain JSON: no word-level timestamps (only the legacy whisper-1 emits them) and no native diarization — OpenAI ships a separate gpt-4o-transcribe-diarize model for speaker labels. Also billed per token as an alternative to the per-minute rate.",
+      "bron": "Artificial Analysis — Speech to Text; OpenAI docs & pricing",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Google Gemini 3 Flash",
+      "provider": "Google",
+      "modelFamilie": "Gemini",
+      "prijs": { "waarde": 1.92, "eenheid": "$/1000 min", "vergelijkbaar": false },
+      "metrics": { "wer": 2.9, "latency_ms": null, "talen_aantal": null, "taal_nl": true, "taal_es": true, "diarisatie": false, "word_timestamps": false, "custom_vocabulary": false, "waarde_score": null },
+      "sterk": "Strong accuracy (2.9% WER) and broad multilingual coverage as part of a multimodal model.",
+      "zwak": "Speech-to-text is a feature of a general LLM, not a dedicated transcription API: no native diarization, word-timestamps or custom vocabulary. The $1.92/1000 min is input-audio tokens only (output transcript billed separately), so it is not directly comparable to per-minute STT pricing.",
+      "bron": "Artificial Analysis — Speech to Text; Google Gemini API pricing",
+      "bron_datum": "2026-08-20"
+    }
+  ],
+  "bronnen": [
+    {
+      "titel": "Artificial Analysis — Speech to Text",
+      "url": "https://artificialanalysis.ai/speech-to-text",
+      "datum": "2026-08-20"
+    },
+    {
+      "titel": "Open ASR Leaderboard",
+      "url": "https://huggingface.co/spaces/hf-audio/open_asr_leaderboard",
+      "datum": "2026-06-19"
+    }
+  ],
+  "queries": {
+    "best-transcription-api-for-podcasts": {
+      "query": "Best transcription API for podcasts",
+      "hap": "For podcast episodes (long multi-speaker recordings) ElevenLabs Scribe v2 is the strongest default: the highest measured accuracy on the Artificial Analysis leaderboard, with full speaker diarization and word-level timestamps, at $3.67 per 1000 minutes. AssemblyAI Universal-3 Pro is the cheapest directly-comparable option at $3.50 per 1000 minutes, with the same diarization and timestamp support for long batch audio. A light estimate from public benchmarks and pricing, August 2026.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "met-diarisatie": "ElevenLabs Scribe v2",
+          "goedkoopste": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "best-transcription-api-for-dutch": {
+      "query": "Best transcription API for Dutch",
+      "hap": "For Dutch speech-to-text, ElevenLabs Scribe v2 leads the Artificial Analysis accuracy leaderboard (2.2% WER — note this is an English-leaning aggregate, not a Dutch-specific score). AssemblyAI Universal-3 Pro is the cheapest directly-comparable option and covers the most languages (99); Deepgram Nova-3 targets low-latency streaming; Speechmatics is a long-standing multilingual pick. Google Gemini scores well but is a general model, not a dedicated API. A light estimate from public benchmarks, not a first-hand Dutch measurement.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "hoogste-nauwkeurigheid": "ElevenLabs Scribe v2",
+          "goedkoopste": "AssemblyAI Universal-3 Pro",
+          "sterkste-meertalig": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "best-speech-to-text-transcription-api-2026": {
+      "query": "Best speech-to-text / transcription API (2026)",
+      "hap": "The strongest speech-to-text APIs in 2026 cluster tightly. ElevenLabs Scribe v2 tops the Artificial Analysis accuracy board at 2.2% WER; AssemblyAI Universal-3 Pro is the cheapest directly-comparable option ($3.50/1000 min) and covers the most languages (99); Deepgram Nova-3 leans on low-latency streaming. Pick by the constraint that matters most — cost, accuracy, latency or language coverage. A light estimate aggregated from public benchmarks with attribution, not a first-hand measurement.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "goedkoopste": "AssemblyAI Universal-3 Pro",
+          "hoogste-nauwkeurigheid": "ElevenLabs Scribe v2",
+          "sterkste-meertalig": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "cheapest-transcription-api-with-good-accuracy": {
+      "query": "Cheapest transcription API with good accuracy",
+      "hap": "Want the lowest price without sacrificing much accuracy? AssemblyAI Universal-3 Pro is the cheapest directly-comparable API at $3.50/1000 min and still posts a competitive 3.1% WER. If you weigh quality and cost together, ElevenLabs Scribe v2 has the better ratio — leaderboard-topping 2.2% WER for $3.67. Token-priced LLM models can look cheaper but bill differently. A light estimate from public benchmarks, not our own measurement.",
+      "recommendation": {
+        "default": "AssemblyAI Universal-3 Pro",
+        "axes": {
+          "goedkoopste": "AssemblyAI Universal-3 Pro",
+          "beste-prijs-kwaliteit": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "most-accurate-transcription-api-for-english": {
+      "query": "Most accurate transcription API for English",
+      "hap": "For English audio, ElevenLabs Scribe v2 leads the Artificial Analysis leaderboard at 2.2% WER. Because that benchmark is English-leaning, the score is most representative precisely for English — a firmer call here than for other languages. Google Gemini (2.9%) is close but is a general multimodal model; AssemblyAI Universal-3 Pro (3.1%) trails slightly while costing less. Still a light estimate aggregated from public benchmarks, not a first-hand test.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "hoogste-nauwkeurigheid": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-transcription-api-for-spanish": {
+      "query": "Best transcription API for Spanish",
+      "hap": "Spanish is widely supported, so the choice comes down to accuracy versus cost. ElevenLabs Scribe v2 ranks highest overall (2.2% WER, though that figure is English-leaning, not Spanish-specific). AssemblyAI Universal-3 Pro covers 99 languages and is the cheapest comparable API; Speechmatics Enhanced brings long-standing multilingual depth. Treat cross-language accuracy as indicative only. A light estimate built from the public benchmarks below, not a first-hand Spanish measurement.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "voor-taal-es": "ElevenLabs Scribe v2",
+          "goedkoopste": "AssemblyAI Universal-3 Pro",
+          "sterkste-meertalig": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "best-multilingual-transcription-api": {
+      "query": "Best multilingual transcription API",
+      "hap": "For the broadest language reach, AssemblyAI Universal-3 Pro supports the most languages here (99) while staying the cheapest directly-comparable API at $3.50/1000 min. ElevenLabs Scribe v2 (90 languages) is more accurate on the leaderboard; Speechmatics Enhanced (~70) carries deep multilingual heritage. Remember the headline WER is an English-leaning aggregate, so per-language quality varies. A light estimate from public benchmarks with attribution, not a first-hand multilingual test.",
+      "recommendation": {
+        "default": "AssemblyAI Universal-3 Pro",
+        "axes": {
+          "sterkste-meertalig": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "lowest-latency-real-time-streaming-transcription-api": {
+      "query": "Lowest-latency real-time / streaming transcription API",
+      "hap": "For live, low-latency streaming, ElevenLabs Scribe v2 and AssemblyAI Universal-3 Pro both publish around 150 ms — the lowest here — though ElevenLabs runs streaming on a separate realtime mode. Deepgram Nova-3 markets sub-300 ms and is built streaming-first with per-second billing. These numbers mix measured P50 with vendor claims and aren't strictly comparable, so weigh them loosely. A light estimate from public sources, not a first-hand latency benchmark.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "laagste-latency": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "cheapest-real-time-streaming-transcription-api": {
+      "query": "Cheapest real-time / streaming transcription API",
+      "hap": "Every directly-comparable API here supports streaming, so the cheapest real-time choice is simply the cheapest overall: AssemblyAI Universal-3 Pro at $3.50/1000 min, with roughly 150 ms latency. ElevenLabs Scribe v2 is a close second on price; Deepgram Nova-3 bills per second, which can suit short or bursty live workloads. Token-priced LLM models are excluded as their per-minute cost isn't comparable. A light estimate from public pricing.",
+      "recommendation": {
+        "default": "AssemblyAI Universal-3 Pro",
+        "axes": {
+          "goedkoopste": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    },
+    "best-transcription-api-with-speaker-diarization": {
+      "query": "Best transcription API with speaker diarization",
+      "hap": "Need to know who spoke when — meetings, interviews, multi-speaker calls? ElevenLabs Scribe v2 is the top-ranked offering with built-in diarization, alongside word timestamps and custom vocabulary. AssemblyAI Universal-3 Pro and Deepgram Nova-3 also return native speaker labels; OpenAI's base transcribe model and Google Gemini do not, needing extra tooling. Diarization quality isn't separately scored here, so this order is accuracy-led. A light estimate from public docs.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "met-diarisatie": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-transcription-api-with-word-level-timestamps": {
+      "query": "Best transcription API with word-level timestamps",
+      "hap": "Subtitling, captioning and audio-text alignment need precise word-level timing. ElevenLabs Scribe v2 ranks highest among the services returning per-word timestamps natively, together with diarization and custom vocabulary. AssemblyAI Universal-3 Pro, Deepgram Nova-3 and Speechmatics Enhanced also emit them; OpenAI's base model and Gemini return plain text only. Timestamp granularity isn't independently benchmarked, so the ranking follows overall accuracy. A light estimate aggregated from provider documentation with attribution.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "met-timestamps": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-transcription-api-with-custom-vocabulary": {
+      "query": "Best transcription API with custom vocabulary",
+      "hap": "When transcripts are full of product names, medical or legal jargon, or unusual spellings, custom vocabulary lifts accuracy. ElevenLabs Scribe v2 leads the offerings supporting phrase lists or keyterm boosting, with AssemblyAI Universal-3 Pro, Deepgram Nova-3 and Speechmatics Enhanced close behind. OpenAI's gpt-transcribe now accepts a keywords parameter of its own, while Gemini still has no dedicated control. Vocabulary handling stays unbenchmarked, so accuracy sets the order. A light estimate from documentation.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "met-custom-vocabulary": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-transcription-api-for-long-form-batch-audio": {
+      "query": "Best transcription API for long-form / batch audio",
+      "hap": "For long recordings processed in batch, per-minute cost dominates at volume: AssemblyAI Universal-3 Pro is the cheapest comparable API ($3.50/1000 min) with broad language support, while ElevenLabs Scribe v2 wins on raw accuracy when transcript quality outweighs spend. We hold no first-hand throughput (RTFx) measurement, so batch processing speed isn't ranked here. A light estimate from public pricing and accuracy benchmarks, not a first-hand batch test.",
+      "recommendation": {
+        "default": "AssemblyAI Universal-3 Pro",
+        "axes": {
+          "goedkoopste": "AssemblyAI Universal-3 Pro",
+          "hoogste-nauwkeurigheid": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-price-to-accuracy-transcription-api": {
+      "query": "Best price-to-accuracy transcription API",
+      "hap": "Balancing what you pay against how accurate it is, ElevenLabs Scribe v2 offers the strongest ratio in this ranking: leaderboard-topping 2.2% WER at a mid-pack $3.67/1000 min. AssemblyAI Universal-3 Pro is the value runner-up — slightly less accurate at 3.1% but a touch cheaper at $3.50. Past those two, accuracy drops off faster than price does. A light estimate computed from public benchmarks, not a first-hand measurement.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "beste-prijs-kwaliteit": "ElevenLabs Scribe v2"
+        }
+      }
+    },
+    "best-whisper-alternative-api": {
+      "query": "Best Whisper alternative (API)",
+      "hap": "Moving off OpenAI Whisper — self-hosted or via API — these hosted services are the practical alternatives. ElevenLabs Scribe v2 is the most accurate option here at 2.2% WER; AssemblyAI Universal-3 Pro is the cheapest comparable one at $3.50/1000 min with the widest language coverage. OpenAI's own gpt-transcribe continues the managed-Whisper lineage if you'd rather stay in that ecosystem. A light estimate from public benchmarks, not a first-hand test.",
+      "recommendation": {
+        "default": "ElevenLabs Scribe v2",
+        "axes": {
+          "hoogste-nauwkeurigheid": "ElevenLabs Scribe v2",
+          "goedkoopste": "AssemblyAI Universal-3 Pro"
+        }
+      }
+    }
+  }
+}

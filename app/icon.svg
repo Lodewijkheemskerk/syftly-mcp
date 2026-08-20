@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Syftly favicon: the visual system's ink square with the amber-accent "S"
+       (warm stone palette from globals.css), so the tab mark matches the site. -->
+  <rect width="64" height="64" rx="12" fill="#1c1917"/>
+  <text x="32" y="45" text-anchor="middle" font-family="ui-monospace, 'IBM Plex Mono', Menlo, monospace" font-size="38" font-weight="600" fill="#fbbf24">S</text>
+</svg>

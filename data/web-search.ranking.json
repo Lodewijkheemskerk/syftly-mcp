@@ -1,0 +1,148 @@
+{
+  "category": "web-search",
+  "label": "Web search",
+  "insluit_regel": "Hosted, commercially callable web-search APIs with top adoption among AI builders for grounding agents/LLMs, one row per flagship search offering.",
+  "zekerheidslabel": "light estimate",
+  "laatst_bijgewerkt": "2026-08-20",
+  "assen": [
+    { "key": "price", "label": "the lowest price", "metric": "prijs", "richting": "min", "kolom": "Price", "keywords": ["price", "pricing", "cheapest", "cost per 1000", "per request", "per query", "prijs", "kosten", "per 1000 queries", "budget", "goedkoopste"] },
+    { "key": "relevance", "label": "the best result relevance", "metric": "agent_score_aimultiple", "richting": "max", "kolom": "Relevance", "keywords": ["relevance", "relevant", "quality", "accuracy", "agent score", "benchmark", "relevantie", "kwaliteit", "nauwkeurigheid"], "caveat": "Relevance leans on a single independent eval (AImultiple) that does not cover every provider; treat it as one methodology's snapshot." },
+    { "key": "latency", "label": "the lowest latency", "metric": "latency_ms_median", "richting": "min", "kolom": "Latency", "eenheid": " ms", "keywords": ["latency", "fast", "fastest", "speed", "response time", "p50", "snelheid", "responstijd", "vertraging"], "caveat": "Latency is the median from a single benchmark run and varies by query complexity and fast/deep modes." },
+    { "key": "llm_clean_output", "label": "clean LLM-ready output", "metric": "llm_native_clean_output", "richting": "filter", "kolom": "LLM-ready", "keywords": ["clean output", "llm-ready", "llm ready", "structured", "markdown", "content extraction", "ready to ground", "schone output", "gestructureerd"] },
+    { "key": "free_tier", "label": "the largest free tier", "metric": "free_tier_queries_monthly", "richting": "max", "kolom": "Free/mo", "keywords": ["free tier", "free queries", "free credit", "gratis", "proefversie", "free plan", "monthly credit"], "caveat": "Free-tier units differ across providers (monthly credits, requests and queries are not identical); figures are approximate equivalents." }
+  ],
+  "providers": [
+    {
+      "naam": "Brave Search API (Data for AI)",
+      "provider": "Brave Software",
+      "modelFamilie": "Independent web index",
+      "prijs": { "waarde": 5, "eenheid": "$/1000 queries", "vergelijkbaar": true },
+      "metrics": { "agent_score_aimultiple": 14.89, "latency_ms_median": 669, "llm_native_clean_output": false, "free_tier_queries_monthly": 1000, "free_tier_note": "$5 credit (~1000 queries)" },
+      "sterk": "Owns an independent index (not a Google reseller) and topped the one independent agent-search eval covering it on both relevance (14.89/best) and lowest measured latency (669ms).",
+      "zwak": "Returns SERP-style results that need extraction for LLM use rather than clean ready-to-ground content; free tier was cut to a $5 monthly credit in Feb 2026.",
+      "bron": "Brave API pricing docs (api-dashboard.search.brave.com/documentation/pricing); AImultiple independent agentic-search benchmark (updated 2026-08-17)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Exa",
+      "provider": "Exa Labs",
+      "modelFamilie": "Neural/embeddings search index",
+      "prijs": { "waarde": 7, "eenheid": "$/1000 queries", "vergelijkbaar": true },
+      "metrics": { "agent_score_aimultiple": 14.39, "latency_ms_median": 1200, "llm_native_clean_output": true, "free_tier_queries_monthly": 1400, "free_tier_note": "$10 credit/month (~1400 searches), plus $20 one-off signup credit" },
+      "sterk": "Neural search plus included page contents for the top 10 results, priced separately at $1/1000 pages; strong relevance in the independent eval (14.39, rank 3).",
+      "zwak": "The free tier was cut from 20000 requests/month to a $10 monthly credit (~1400 searches); standard search is $7/1k and deep tiers climb fast (Deep and Deep-lite $12, Deep-reasoning $15); median latency (~1.2s) is mid-pack, slower than Brave/Tavily.",
+      "bron": "Exa pricing page (exa.ai/pricing) and pricing reference (exa.ai/docs/reference/pricing); AImultiple independent benchmark (updated 2026-08-17)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Tavily Search API",
+      "provider": "Tavily (acquired by Nebius, Feb 2026)",
+      "modelFamilie": "Aggregator + RAG-optimized layer",
+      "prijs": { "waarde": 8, "eenheid": "$/1000 queries", "vergelijkbaar": true },
+      "metrics": { "agent_score_aimultiple": 13.67, "latency_ms_median": 998, "llm_native_clean_output": true, "free_tier_queries_monthly": 1000, "free_tier_note": "1000 credits/month" },
+      "sterk": "Purpose-built for RAG/agents with clean LLM-ready output and huge developer adoption (3M+ monthly SDK downloads); solid measured latency (~1s).",
+      "zwak": "Basic search at $8/1k (advanced $16/1k) is the priciest per-query of the search-native group, and it ranked mid-table (13.67, rank 5) below Brave/Exa in the independent eval; ownership now sits under Nebius.",
+      "bron": "Tavily API credits docs (docs.tavily.com/documentation/api-credits); AImultiple benchmark (updated 2026-08-17); Nebius acquisition (announced 2026-02-10)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Linkup",
+      "provider": "Linkup",
+      "modelFamilie": "Agent-native search + grounding",
+      "prijs": { "waarde": 5, "eenheid": "$/1000 queries", "vergelijkbaar": true },
+      "metrics": { "agent_score_aimultiple": null, "latency_ms_median": null, "llm_native_clean_output": true, "free_tier_queries_monthly": 4000, "free_tier_note": "$20 credit/month (~4000 standard queries)" },
+      "sterk": "Low entry price for standard search ($5/1k raw results, $6/1k with a sourced answer), clean LLM-ready output, and a recurring $20 monthly credit worth about 4000 standard queries.",
+      "zwak": "Deep search is 10x the standard price ($50/1k raw, $55/1k sourced), so the cheap entry price only holds for standard queries; not covered by the one independent multi-provider eval available, so its relevance/latency rank is unverified; its top SimpleQA claims are vendor self-reported (Tier 3) and conflict with rival self-reports.",
+      "bron": "Linkup pricing page (linkup.so/pricing) and pricing docs (docs.linkup.so/pages/documentation/platform/pricing); SimpleQA claim is self-reported (linkup.so/blog) and NOT used for ranking",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Parallel Search API",
+      "provider": "Parallel Web Systems",
+      "modelFamilie": "Agent-native search index",
+      "prijs": { "waarde": 5, "eenheid": "$/1000 queries", "vergelijkbaar": true },
+      "metrics": { "agent_score_aimultiple": null, "latency_ms_median": null, "llm_native_clean_output": true, "free_tier_queries_monthly": 5000, "free_tier_note": "5000 requests/month across all APIs" },
+      "sterk": "Largest free tier in this table (5000 requests/month) and a cheap low-latency path: Turbo and Fast are $1/1k, with Basic and Advanced at $5/1k, all returning token-efficient excerpts built for agents.",
+      "zwak": "Its relevance score cannot be used here: the independent eval scored tiers named Base (13.50) and Pro (14.21, ~13.6s average latency) that no longer match Parallel's current Turbo/Fast/Basic/Advanced tiers, so no score maps to a priced tier.",
+      "bron": "Parallel pricing page (parallel.ai/pricing); AImultiple independent benchmark (updated 2026-08-17) covers it under older tier names",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "Perplexity Sonar / Search API",
+      "provider": "Perplexity AI",
+      "modelFamilie": "Sonar (LLM) + Search API",
+      "prijs": { "waarde": 5, "eenheid": "$/1000 queries", "vergelijkbaar": false },
+      "metrics": { "agent_score_aimultiple": 12.96, "latency_ms_median": 11000, "llm_native_clean_output": true, "free_tier_queries_monthly": null, "free_tier_note": null },
+      "sterk": "Raw Search API is a flat $5/1k for clean web results, and Sonar adds synthesized, citation-backed answers in one call — convenient for answer-style agents.",
+      "zwak": "Pricing is hard to compare (raw Search is $5/1k, but Sonar adds per-token charges plus a $5-$14/1k request fee by context size); ranked last-but-one on relevance (12.96) and the synthesized path measured ~11s latency in the independent eval.",
+      "bron": "Perplexity pricing docs (docs.perplexity.ai/docs/getting-started/pricing); AImultiple benchmark (updated 2026-08-17)",
+      "bron_datum": "2026-08-20"
+    },
+    {
+      "naam": "SerpAPI (Google SERP API)",
+      "provider": "SerpApi LLC",
+      "modelFamilie": "Real-time Google/Bing SERP scraper",
+      "prijs": { "waarde": 25, "eenheid": "$/1000 queries", "vergelijkbaar": false },
+      "metrics": { "agent_score_aimultiple": 12.28, "latency_ms_median": 2400, "llm_native_clean_output": false, "free_tier_queries_monthly": 250, "free_tier_note": "250 searches/month" },
+      "sterk": "Gives true Google/Bing SERP data (ads, rich snippets, knowledge panels) parsed into structured JSON — the closest to 'what a human sees on Google'.",
+      "zwak": "Subscription-based ($25/1k entry, dropping to ~$5/1k only at high reserved volume) so not directly comparable per-query; ranked last on the independent agent relevance eval (12.28) and returns raw SERP fields, not LLM-ground-ready content.",
+      "bron": "SerpApi pricing page (serpapi.com/pricing); AImultiple benchmark (updated 2026-08-17)",
+      "bron_datum": "2026-08-20"
+    }
+  ],
+  "bronnen": [
+    { "titel": "Brave Search API — Pricing (provider docs)", "url": "https://api-dashboard.search.brave.com/documentation/pricing", "datum": "2026-08-20" },
+    { "titel": "Exa — API Pricing (provider docs)", "url": "https://exa.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "Exa — Pricing reference (provider docs)", "url": "https://exa.ai/docs/reference/pricing", "datum": "2026-08-20" },
+    { "titel": "Tavily — Credits & Pricing (provider docs)", "url": "https://docs.tavily.com/documentation/api-credits", "datum": "2026-08-20" },
+    { "titel": "Linkup — Pricing (provider docs)", "url": "https://www.linkup.so/pricing", "datum": "2026-08-20" },
+    { "titel": "Linkup — Pricing reference incl. deep search (provider docs)", "url": "https://docs.linkup.so/pages/documentation/platform/pricing", "datum": "2026-08-20" },
+    { "titel": "Parallel — Pricing (provider docs)", "url": "https://parallel.ai/pricing", "datum": "2026-08-20" },
+    { "titel": "Perplexity — API Pricing (provider docs)", "url": "https://docs.perplexity.ai/docs/getting-started/pricing", "datum": "2026-08-20" },
+    { "titel": "SerpApi — Plans and Pricing (provider docs)", "url": "https://serpapi.com/pricing", "datum": "2026-08-20" },
+    { "titel": "AImultiple — Agentic Search: Benchmark 8 Search APIs for Agents (independent eval, page updated 2026-08-17; scores unchanged from the previous run)", "url": "https://aimultiple.com/agentic-search", "datum": "2026-08-20" },
+    { "titel": "Nebius announces agreement to acquire Tavily (announced 2026-02-10)", "url": "https://nebius.com/newsroom/nebius-announces-agreement-to-acquire-tavily-to-add-agentic-search-to-its-ai-cloud-platform", "datum": "2026-08-20" }
+  ],
+  "queries": {
+    "best-web-search-api-for-ai-agents": {
+      "query": "Best web search API for AI agents",
+      "hap": "For grounding AI agents with live web results, Brave Search API is the strongest all-rounder here: it owns an independent index and topped the one independent agent-search eval on both relevance and measured latency, at a low $5 per 1000 queries. Exa returns cleaner LLM-ready content with page text, and Parallel has the largest free tier at 5000 requests per month. A light estimate leaning on a single benchmark, August 2026.",
+      "recommendation": {
+        "default": "Brave Search API (Data for AI)",
+        "axes": {
+          "price": "Brave Search API (Data for AI)",
+          "relevance": "Brave Search API (Data for AI)",
+          "latency": "Brave Search API (Data for AI)",
+          "llm_clean_output": "Exa",
+          "free_tier": "Parallel Search API"
+        }
+      }
+    },
+    "cheapest-web-search-api": {
+      "query": "Cheapest web search API",
+      "hap": "Among search-native APIs with a clean, comparable per-query price, Brave Search, Linkup and Parallel are the cheapest at about $5 per 1000 queries, ahead of Exa ($7) and Tavily ($8). Parallel's Turbo and Fast tiers go lower still, and Linkup's deep search runs ten times its standard rate. SerpAPI is subscription-tiered and Perplexity Sonar mixes per-query and per-token fees, so both are excluded as non-comparable. A light estimate from provider pricing pages, August 2026.",
+      "recommendation": { "default": "Brave Search API (Data for AI)", "axes": { "price": "Brave Search API (Data for AI)" } }
+    },
+    "most-relevant-web-search-api": {
+      "query": "Most relevant web search API",
+      "hap": "In AImultiple's independent agentic-search benchmark, Brave Search scored highest on result relevance (14.89 agent score) and also had the lowest measured median latency at 669 ms, ahead of Exa and Tavily. Result quality is genuinely hard to benchmark and this leans on a single eval that does not cover every provider, so treat the agent score as one methodology's snapshot, not settled truth. A light estimate.",
+      "recommendation": {
+        "default": "Brave Search API (Data for AI)",
+        "axes": {
+          "relevance": "Brave Search API (Data for AI)",
+          "latency": "Brave Search API (Data for AI)"
+        }
+      }
+    },
+    "web-search-api-with-clean-llm-ready-output": {
+      "query": "Web search API with clean LLM-ready output",
+      "hap": "For output you can feed straight to an LLM, Exa returns clean page contents for the top results rather than raw SERP listings, and it scored highest on relevance among the LLM-ready group in the independent eval. Tavily, Linkup, Parallel and Perplexity also return LLM-ready output, while Brave and SerpAPI return SERP-style results that still need extraction. A light estimate from provider documentation, August 2026.",
+      "recommendation": { "default": "Exa", "axes": { "llm_clean_output": "Exa" } }
+    },
+    "web-search-api-with-the-largest-free-tier": {
+      "query": "Web search API with the largest free tier",
+      "hap": "Parallel has the largest free tier of the search APIs here at 5000 requests per month, ahead of Linkup (a monthly credit worth about 4000 standard queries) and Exa (about 1400 searches monthly, cut back from 20000). Brave and Tavily sit around 1000 per month and SerpAPI at 250. Free-tier units differ — credits, requests and queries are not identical — so treat these as approximate equivalents. A light estimate from provider pricing pages, August 2026.",
+      "recommendation": { "default": "Parallel Search API", "axes": { "free_tier": "Parallel Search API" } }
+    }
+  }
+}
