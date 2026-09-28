@@ -158,3 +158,11 @@ export function routeCategory(query: string): RouteResult {
 export function detectCategory(query: string): string {
   return matchCategory(query) ?? DEFAULT_CATEGORY;
 }
+
+/** The category to record in telemetry: the caller's explicit argument only when
+ * it is a registered id, otherwise the detected one — so a malformed argument
+ * ("web search") never becomes its own row in the dashboard. */
+export function categoryForLog(query: string, explicit?: unknown): string | null {
+  if (typeof explicit === "string" && RANKINGS.some((r) => r.category === explicit)) return explicit;
+  return matchCategory(query);
+}

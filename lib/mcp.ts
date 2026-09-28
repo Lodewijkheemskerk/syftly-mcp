@@ -1,6 +1,8 @@
 import { getArtefactByQuery } from "@/lib/artefact";
 import { getRanking, listCategories } from "@/lib/categories";
-import { artefactToMarkdown } from "@/lib/markdown";
+import { artefactToMarkdown, comparisonToMarkdown } from "@/lib/markdown";
+import { findComparison, getComparison } from "@/lib/provider-pages";
+import { canonical } from "@/lib/site";
 import { toPublicArtefact, PUBLIC_ARTEFACT_SCHEMA } from "@/lib/contract";
 
 // The machine view of the Antwoord-artefact, served as an MCP tool (ADR 0002).
@@ -59,6 +61,15 @@ export function toolDescription(labels: string[]): string {
     'Optionally pass "category" to disambiguate; otherwise it is detected from the question.'
   );
 }
+
+// Appended to every tool answer. Callers are anonymous (IP-hash only), so this is
+// the one channel to learn who uses Syftly and why a caller stops: a place to ask,
+// and a free self-chosen identity tag (x-api-key, no signup) that groups a
+// pipeline's calls under one name in telemetry instead of one row per IP.
+export const FEEDBACK_URL = "https://github.com/Lodewijkheemskerk/syftly-mcp/issues";
+const FEEDBACK_FOOTER =
+  `---\nUsing Syftly in an agent or pipeline? Missing a provider or criterion? Tell us: ${FEEDBACK_URL}. ` +
+  "Optionally send any stable name as the `x-api-key` header (free, no signup) so we can keep your use case covered.";
 
 const CATEGORIES = listCategories();
 const CATEGORY_IDS = new Set(CATEGORIES.map((r) => r.category));
@@ -187,8 +198,19 @@ function callTool(id: string | number | null, params: unknown): JsonRpcResponse 
   // the agent sees the full comparison either way. A no-match is a NORMAL result
   // (isError:false): the call succeeded; routing carries that nothing was in scope.
   const assen = getRanking(artefact.category)?.assen ?? [];
+  let text = artefactToMarkdown(artefact, assen);
+  // A two-provider question ("Cartesia vs ElevenLabs") gets the head-to-head
+  // right under the H1; the full ranking still follows. Text view only — the
+  // structuredContent contract stays the plain artefact.
+  const pair = findComparison(query, category);
+  const cmp = pair && getComparison(pair.category, pair.pair);
+  if (pair && cmp) {
+    const head = comparisonToMarkdown(cmp, canonical(`/compare/${pair.category}/${pair.pair}`));
+    text = text.replace(/^# .*\n\n/, (h1) => h1 + head + "\n");
+  }
+  text = `${text.trimEnd()}\n\n${FEEDBACK_FOOTER}\n`;
   return ok(id, {
-    content: [{ type: "text", text: artefactToMarkdown(artefact, assen) }],
+    content: [{ type: "text", text }],
     structuredContent: toPublicArtefact(artefact),
   });
 }

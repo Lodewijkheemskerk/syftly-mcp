@@ -10,11 +10,13 @@ import {
   callsInLastHours,
   usageEvents,
   callersBreakdown,
+  clientGroups,
   type NorthStar,
   type Tally,
   type KeyCount,
   type DayPoint,
   type CallerRow,
+  type ClientGroupRow,
 } from "@/lib/metrics";
 
 // Pure composition layer for the private /admin dashboard: folds a window of
@@ -38,6 +40,9 @@ export interface DashboardData {
   // Every caller in the window, most recently seen first — self test traffic
   // and init-only (scanner-shaped) callers labeled, not hidden.
   callers: CallerRow[];
+  // Usage grouped per likely consumer (x-api-key name, else user-agent): the
+  // non-inflating counterpart of the per-IP unique-callers count.
+  consumers: ClientGroupRow[];
 }
 
 export function buildDashboard(
@@ -60,5 +65,6 @@ export function buildDashboard(
     gaps: gapQueries(usage, (q) => matchCategory(q) !== null),
     trend: timeline(usage),
     callers: callersBreakdown(events),
+    consumers: clientGroups(usage),
   };
 }

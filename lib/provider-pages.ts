@@ -1,5 +1,5 @@
 import type { Beslisas, CategorieRanking, Prijs, ProviderAanbod } from "@/lib/types";
-import { getRanking, listCategories } from "@/lib/categories";
+import { getRanking, listCategories, routeCategory } from "@/lib/categories";
 import { cheapest, PRIJS_METRIC } from "@/lib/engine";
 import { slugify } from "@/lib/slug";
 
@@ -107,7 +107,7 @@ function compareSummary(ranking: CategorieRanking, a: ProviderAanbod, b: Provide
     .slice(0, 3)
     .map((v) => {
       const w = v.winner === "a" ? a : b;
-      return `${v.axis.kolom}: ${v.va} vs ${v.vb} — edge ${providerDisplay(w.provider)}`;
+      return `${v.axis.kolom}: ${v.va} vs ${v.vb} — edge ${providerDisplay(w.provider)}.`;
     });
   const head = `${a.naam} vs ${b.naam} for ${ranking.label.toLowerCase()}.`;
   const tail = `Computed from public benchmarks with dated sources; updated ${ranking.laatst_bijgewerkt}.`;
@@ -212,4 +212,39 @@ export function listProviderSlugs(): string[] {
     for (const { slug } of uniqueProviders(ranking)) slugs.add(slug);
   }
   return [...slugs];
+}
+
+// Words an agent uses for a provider: the company slug ("bright-data") plus the
+// first word of the product name ("aws" for "AWS Textract", "azure" for "Azure
+// Document Intelligence"). "web" (Bright Data's "Web Unlocker") is too generic.
+const GENERIC_ALIASES = new Set(["web"]);
+function aliases(p: ProviderAanbod): string[] {
+  const first = slugify(p.naam).split("-")[0];
+  return [providerSlug(p.provider), ...(first && !GENERIC_ALIASES.has(first) ? [first] : [])];
+}
+
+// Canonical pair when the query names EXACTLY two providers of the category;
+// one provider or three+ is a ranking question, not a head-to-head.
+function pairIn(ranking: CategorieRanking, query: string): string | null {
+  const q = `-${slugify(query)}-`;
+  const named = uniqueProviders(ranking).filter(({ aanbod }) =>
+    aliases(aanbod).some((a) => q.includes(`-${a}-`)),
+  );
+  return named.length === 2 ? `${named[0].slug}-vs-${named[1].slug}` : null;
+}
+
+/**
+ * The head-to-head a query asks for ("Cartesia vs ElevenLabs for narration"), as
+ * a canonical compare pair, or null. The explicit or detected category decides
+ * where to look; without one, the pair must be unambiguous across categories.
+ */
+export function findComparison(query: string, category?: string): { category: string; pair: string } | null {
+  const route = routeCategory(query);
+  const scope = category ?? (route.routing === "matched" ? route.category : null);
+  const rankings = scope ? [getRanking(scope)].filter((r) => r !== null) : listCategories();
+  const hits = rankings.flatMap((r) => {
+    const pair = pairIn(r, query);
+    return pair ? [{ category: r.category, pair }] : [];
+  });
+  return hits.length === 1 ? hits[0] : null;
 }

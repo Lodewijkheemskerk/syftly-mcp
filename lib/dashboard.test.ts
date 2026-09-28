@@ -82,3 +82,19 @@ describe("buildDashboard", () => {
     ]);
   });
 });
+
+describe("buildDashboard consumers", () => {
+  it("groups strangers' usage per likely consumer, without self or init rows", () => {
+    const data = buildDashboard(
+      [
+        call("ip:a", { userAgent: "python-httpx/0.28.1" }),
+        call("ip:b", { userAgent: "python-httpx/0.28.1" }),
+        call("self:you", { userAgent: "curl" }),
+        call("ip:scanner", { format: "init", query: "(initialize)", userAgent: "probe" }),
+      ],
+      7,
+    );
+    expect(data.consumers).toHaveLength(1);
+    expect(data.consumers[0]).toMatchObject({ client: "python-httpx/0.28.1", calls: 2, ips: 2 });
+  });
+});

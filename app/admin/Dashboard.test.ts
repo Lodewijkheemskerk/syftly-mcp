@@ -97,3 +97,15 @@ describe("Dashboard view", () => {
     expect(html.toLowerCase()).toContain("trend"); // trend panel heading
   });
 });
+
+describe("Dashboard consumers panel", () => {
+  it("shows likely consumers with their IP spread", () => {
+    const data = buildDashboard(
+      [call("ip:a", { userAgent: "python-httpx/0.28.1" }), call("ip:b", { userAgent: "python-httpx/0.28.1" })],
+      7,
+    );
+    const html = renderToStaticMarkup(Dashboard({ data }));
+    expect(html).toContain("Likely consumers");
+    expect(html).toContain("python-httpx/0.28.1");
+  });
+});

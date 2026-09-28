@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { northStar, topQueries, categoryBreakdown, endpointBreakdown, gapQueries, timeline, callsInLastHours, usageEvents, callersBreakdown, isEchoQuery } from "@/lib/metrics";
+import { northStar, topQueries, categoryBreakdown, endpointBreakdown, gapQueries, timeline, callsInLastHours, usageEvents, callersBreakdown, isEchoQuery, clientGroups } from "@/lib/metrics";
 import type { CallEvent } from "@/lib/events";
 
 function ev(over: Partial<CallEvent>): CallEvent {
@@ -296,5 +296,25 @@ describe("callersBreakdown", () => {
     );
     const [row] = callersBreakdown(events, 3);
     expect(row.queries).toEqual(["a", "c", "d"]); // most recent 3 distinct
+  });
+});
+
+// Sep 2026: one pipeline rotating cloud IPs showed up as 56 "unique callers".
+// Grouping usage per self-named key, else per user-agent, gives the opposite
+// bound: it can merge strangers on the same HTTP library, but never inflates.
+describe("clientGroups", () => {
+  it("groups usage by x-api-key name, else by user-agent, counting IPs and active days", () => {
+    const events = [
+      ev({ caller: "ip:a", userAgent: "python-httpx/0.28.1", ts: "2026-09-22T02:00:00.000Z", query: "q1" }),
+      ev({ caller: "ip:b", userAgent: "python-httpx/0.28.1", ts: "2026-09-22T03:00:00.000Z", query: "q2" }),
+      ev({ caller: "ip:c", userAgent: "python-httpx/0.28.1", ts: "2026-09-24T04:00:00.000Z", query: "q3" }),
+      ev({ caller: "key:acme-pipeline", userAgent: "node", ts: "2026-09-23T10:00:00.000Z", query: "q4" }),
+      ev({ caller: "ip:d", userAgent: null, ts: "2026-09-23T11:00:00.000Z", query: "q5" }),
+    ];
+    expect(clientGroups(events)).toEqual([
+      { client: "python-httpx/0.28.1", calls: 3, ips: 3, days: 2, firstSeen: "2026-09-22T02:00:00.000Z", lastSeen: "2026-09-24T04:00:00.000Z" },
+      { client: "key:acme-pipeline", calls: 1, ips: 1, days: 1, firstSeen: "2026-09-23T10:00:00.000Z", lastSeen: "2026-09-23T10:00:00.000Z" },
+      { client: "(no user-agent)", calls: 1, ips: 1, days: 1, firstSeen: "2026-09-23T11:00:00.000Z", lastSeen: "2026-09-23T11:00:00.000Z" },
+    ]);
   });
 });

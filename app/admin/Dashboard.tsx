@@ -14,6 +14,7 @@ export default function Dashboard({ data }: { data: DashboardData }) {
     gaps,
     trend,
     callers,
+    consumers,
   } = data;
   return (
     <main className="admin">
@@ -32,6 +33,16 @@ export default function Dashboard({ data }: { data: DashboardData }) {
               pipeline has gone silent — a broken north-star, made visible. */}
           <Stat label="Calls (24h)" value={calls24h} />
         </div>
+      </section>
+
+      <section className="admin-panel" aria-label="Likely consumers">
+        <h2>Likely consumers — grouped</h2>
+        <p className="admin-note">
+          Usage per self-named x-api-key, else per user-agent. A pipeline rotating cloud IPs is one
+          row here but many unique callers above; strangers on the same HTTP library merge here.
+          The truth is between the two numbers.
+        </p>
+        <ConsumerTable rows={consumers} />
       </section>
 
       <section className="admin-panel" aria-label="Callers">
@@ -83,6 +94,38 @@ function seenRange(first: string, last: string): string {
   const f = first.slice(5, 10);
   const l = last.slice(5, 10);
   return f === l ? f : `${f} → ${l}`;
+}
+
+function ConsumerTable({ rows }: { rows: DashboardData["consumers"] }) {
+  if (rows.length === 0) return <p className="admin-empty">No usage yet.</p>;
+  return (
+    <div className="admin-callers-wrap">
+      <table className="admin-callers">
+        <thead>
+          <tr>
+            <th>Consumer</th>
+            <th className="admin-num">Calls</th>
+            <th className="admin-num">IPs</th>
+            <th className="admin-num">Days</th>
+            <th>Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.client}>
+              <td className="admin-caller-client">{r.client}</td>
+              <td className="admin-num">{r.calls}</td>
+              <td className="admin-num">{r.ips}</td>
+              <td className="admin-num">{r.days}</td>
+              <td className="admin-caller-seen" title={`${r.firstSeen} → ${r.lastSeen}`}>
+                {seenRange(r.firstSeen, r.lastSeen)}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
 }
 
 type CallerRows = DashboardData["callers"];

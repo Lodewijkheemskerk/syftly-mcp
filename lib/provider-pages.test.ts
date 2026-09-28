@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   canonicalPair,
+  findComparison,
   getComparison,
   getProviderPricing,
   listComparePairs,
@@ -76,6 +77,11 @@ describe("getComparison", () => {
     }
   });
 
+  it("summary separates each verdict as its own sentence", () => {
+    expect(cmp.summary).not.toMatch(/edge [A-Za-z]+ [A-Z]/); // no run-on "edge X Axis:"
+    expect(cmp.summary).toMatch(/— edge [^.]+\. /);
+  });
+
   it("summary names both offerings and only computed values", () => {
     expect(cmp.summary).toContain("AssemblyAI Universal-3 Pro");
     expect(cmp.summary).toContain("Deepgram Nova-3");
@@ -131,5 +137,42 @@ describe("getProviderPricing", () => {
     expect(slugs).toContain("deepgram");
     expect(slugs).toContain("google-cloud");
     expect(getProviderPricing("not-a-provider")).toBeNull();
+  });
+});
+
+describe("findComparison", () => {
+  // Real head-to-head questions agents sent the MCP tool (telemetry, Sep 2026).
+  it("detects a two-provider question and returns the canonical pair", () => {
+    expect(findComparison("Cartesia Sonic vs ElevenLabs for natural-sounding narration")).toEqual({
+      category: "tts",
+      pair: "elevenlabs-vs-cartesia",
+    });
+    expect(
+      findComparison("Compare ElevenLabs Scribe v2 versus AssemblyAI Universal-3 Pro for a content pipeline"),
+    ).toEqual({ category: "transcription", pair: "elevenlabs-vs-assemblyai" });
+  });
+
+  it("recognises products by their product name, not only the company", () => {
+    expect(findComparison("AWS Textract or Azure Document Intelligence for invoices?")).toEqual({
+      category: "ocr",
+      pair: "amazon-web-services-vs-microsoft-azure",
+    });
+  });
+
+  it("uses the explicit category when a provider pair exists in several", () => {
+    expect(findComparison("ElevenLabs vs Deepgram", "transcription")?.category).toBe("transcription");
+    expect(findComparison("ElevenLabs vs Deepgram text-to-speech")?.category).toBe("tts");
+  });
+
+  it("returns null for one provider, three or more, or none", () => {
+    expect(findComparison("Is Firecrawl good for JavaScript-heavy sites?")).toBeNull();
+    expect(findComparison("pricing for ElevenLabs, Cartesia and OpenAI TTS")).toBeNull();
+    expect(findComparison("best text-to-speech API")).toBeNull();
+    expect(findComparison("openai vs anthropic for code generation")).toBeNull();
+  });
+
+  it("every returned pair resolves to a comparison", () => {
+    const hit = findComparison("Firecrawl vs Bright Data Web Unlocker")!;
+    expect(getComparison(hit.category, hit.pair)).not.toBeNull();
   });
 });

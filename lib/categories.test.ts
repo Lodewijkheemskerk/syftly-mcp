@@ -6,6 +6,7 @@ import {
   detectCategory,
   matchCategory,
   matchCategories,
+  categoryForLog,
   routeCategory,
   supportedCategories,
 } from "@/lib/categories";
@@ -215,5 +216,24 @@ describe("supportedCategories — the honest catalogue for a no-match reply", ()
     const ids = cats.map((c) => c.category);
     expect(ids).toEqual(["transcription", "tts", "web-search", "scraping", "ocr"]);
     for (const c of cats) expect(c.label.length).toBeGreaterThan(0);
+  });
+});
+
+// Telemetry logged the caller's raw category argument, so "web search",
+// "web_search" and "invalid_category" split the dashboard's category counts.
+describe("categoryForLog", () => {
+  it("keeps a valid explicit category", () => {
+    expect(categoryForLog("anything", "ocr")).toBe("ocr");
+  });
+
+  it("falls back to the detected category for an invalid or missing argument", () => {
+    expect(categoryForLog("best web search API for news", "web search")).toBe("web-search");
+    expect(categoryForLog("best web search API for news", "invalid_category")).toBe("web-search");
+    expect(categoryForLog("best web search API for news", 42)).toBe("web-search");
+    expect(categoryForLog("best web search API for news")).toBe("web-search");
+  });
+
+  it("is null when nothing matches", () => {
+    expect(categoryForLog("climate", "climate")).toBeNull();
   });
 });

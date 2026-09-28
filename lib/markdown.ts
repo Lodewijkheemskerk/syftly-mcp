@@ -1,5 +1,6 @@
 import type { AntwoordArtefact, Beslisas, ProviderAanbod } from "@/lib/types";
 import { PRIJS_METRIC } from "@/lib/engine";
+import type { Comparison } from "@/lib/provider-pages";
 
 // A fourth, machine-friendly view of the Antwoord-artefact (ADR 0002): the same
 // hap, provider table and dated sources as the human page and the JSON/MCP
@@ -210,5 +211,26 @@ export function artefactToMarkdown(a: AntwoordArtefact, assen: Beslisas[] = []):
   }
   lines.push("");
 
+  return lines.join("\n");
+}
+
+/**
+ * A head-to-head as Markdown, for the MCP text view of a two-provider question:
+ * the computed summary, one row per numeric axis with the edge (never a guess on
+ * a tie or missing value), capability rows, and a link to the full compare page.
+ */
+export function comparisonToMarkdown(c: Comparison, url: string): string {
+  const a = cell(c.a.naam);
+  const b = cell(c.b.naam);
+  const lines = [`## Head-to-head: ${a} vs ${b}`, "", c.summary, ""];
+  lines.push(`| Axis | ${a} | ${b} | Edge |`, "| --- | --- | --- | --- |");
+  for (const v of c.verdicts) {
+    const edge = v.winner === "a" ? a : v.winner === "b" ? b : "—";
+    lines.push(`| ${cell(v.axis.kolom ?? "")} | ${cell(v.va)} | ${cell(v.vb)} | ${edge} |`);
+  }
+  for (const x of c.badges) {
+    lines.push(`| ${cell(x.axis.kolom ?? "")} | ${x.a ? "yes" : "no"} | ${x.b ? "yes" : "no"} | — |`);
+  }
+  lines.push("", `Full comparison: ${safeUrl(url)}`, "");
   return lines.join("\n");
 }

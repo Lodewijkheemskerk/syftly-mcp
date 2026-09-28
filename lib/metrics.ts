@@ -229,3 +229,43 @@ export function northStar(events: CallEvent[], minCalls = 2): NorthStar {
     minCalls,
   };
 }
+
+/** One likely consumer: a self-named x-api-key, else one user-agent. */
+export interface ClientGroupRow {
+  client: string;
+  calls: number;
+  ips: number; // distinct caller ids folded into this group
+  days: number; // distinct UTC days with a call — "came back" shows here
+  firstSeen: string;
+  lastSeen: string;
+}
+
+/**
+ * Group (usage) events per likely consumer, most calls first. The per-IP caller
+ * count over-counts a pipeline that rotates cloud IPs; this is the opposite
+ * bound — it may merge strangers on the same HTTP library, but never inflates.
+ * Read the two together.
+ */
+export function clientGroups(events: CallEvent[]): ClientGroupRow[] {
+  const groups = new Map<string, { calls: number; ips: Set<string>; days: Set<string>; first: string; last: string }>();
+  for (const e of events) {
+    const client = e.caller.startsWith("key:") ? e.caller : (e.userAgent ?? "(no user-agent)");
+    const g = groups.get(client) ?? { calls: 0, ips: new Set(), days: new Set(), first: e.ts, last: e.ts };
+    g.calls++;
+    g.ips.add(e.caller);
+    g.days.add(e.ts.slice(0, 10));
+    if (e.ts < g.first) g.first = e.ts;
+    if (e.ts > g.last) g.last = e.ts;
+    groups.set(client, g);
+  }
+  return [...groups.entries()]
+    .map(([client, g]) => ({
+      client,
+      calls: g.calls,
+      ips: g.ips.size,
+      days: g.days.size,
+      firstSeen: g.first,
+      lastSeen: g.last,
+    }))
+    .sort((a, b) => b.calls - a.calls || a.firstSeen.localeCompare(b.firstSeen));
+}

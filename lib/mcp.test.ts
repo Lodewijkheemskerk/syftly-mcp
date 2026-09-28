@@ -429,3 +429,39 @@ describe("clientInfoFrom \u2014 MCP client identity off the initialize handshake
     ).toBe("evil client [31m1.0");
   });
 });
+
+// Telemetry (Sep 2026): 44 queries in 38 days asked for a head-to-head
+// ("Cartesia Sonic vs ElevenLabs …") and got the generic category answer, and no
+// caller could be identified or reached. The tool text now answers the pair and
+// invites the caller to identify itself.
+describe("tools/call head-to-head + feedback", () => {
+  function text(query: string): string {
+    const res = handleRpc({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: TOOL.name, arguments: { query } },
+    });
+    const content = result(res).content as { text: string }[];
+    return content[0].text;
+  }
+
+  it("leads with a head-to-head section and links the compare page for a two-provider question", () => {
+    const t = text("Cartesia Sonic vs ElevenLabs for natural-sounding narration");
+    expect(t).toContain("## Head-to-head");
+    expect(t).toContain("/compare/tts/elevenlabs-vs-cartesia");
+    // The full ranking still follows, so the contract view is unchanged.
+    expect(t.indexOf("## Head-to-head")).toBeLessThan(t.indexOf("## Provider offerings"));
+  });
+
+  it("has no head-to-head section for a plain ranking question", () => {
+    expect(text("best text-to-speech API")).not.toContain("## Head-to-head");
+  });
+
+  it("ends every answer with a feedback link and the x-api-key identity hint", () => {
+    for (const t of [text("best text-to-speech API"), text("zzz qqq")]) {
+      expect(t).toContain("github.com/Lodewijkheemskerk/syftly-mcp/issues");
+      expect(t).toContain("x-api-key");
+    }
+  });
+});

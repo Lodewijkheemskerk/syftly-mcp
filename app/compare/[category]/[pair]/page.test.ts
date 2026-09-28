@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
-import Page, { dynamicParams, generateMetadata, generateStaticParams } from "@/app/compare/[category]/[pair]/page";
+import Page, * as pageModule from "@/app/compare/[category]/[pair]/page";
+import { generateMetadata, generateStaticParams } from "@/app/compare/[category]/[pair]/page";
 import { getComparison, listComparePairs } from "@/lib/provider-pages";
 
 const CATEGORY = "transcription";
@@ -14,9 +15,16 @@ async function renderPage(category: string, pair: string): Promise<string> {
 // (same data, same honesty rules as the answer pages) — indexable, canonical,
 // and statically generated for exactly the registry-derived pair inventory.
 describe("compare-pagina", () => {
-  it("genereert precies de canonieke paren, en niets dynamisch daarbuiten", () => {
+  it("genereert precies de canonieke paren; dynamicParams blijft AAN voor de 308", () => {
     expect(generateStaticParams()).toEqual(listComparePairs().map(({ category, pair }) => ({ category, pair })));
-    expect(dynamicParams).toBe(false);
+    // Regression: dynamicParams=false made the router 404 a reversed pair
+    // BEFORE the page's permanentRedirect could run (live-verified). The
+    // redirect requires unknown params to reach the page code.
+    expect((pageModule as { dynamicParams?: boolean }).dynamicParams).toBeUndefined();
+  });
+
+  it("een niet-bestaand paar 404t in de paginacode (geen content onder crafted URLs)", async () => {
+    await expect(renderPage(CATEGORY, "foo-vs-bar")).rejects.toThrow(/NEXT_HTTP_ERROR_FALLBACK|NEXT_NOT_FOUND/);
   });
 
   it("rendert H1 met beide providers en de per-as waarden uit de ranking", async () => {

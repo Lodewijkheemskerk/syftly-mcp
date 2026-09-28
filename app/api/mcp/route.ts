@@ -1,11 +1,11 @@
 import { handleRpc, handleRpcBatch, clientInfoFrom, type JsonRpcRequest } from "@/lib/mcp";
-import { matchCategory } from "@/lib/categories";
+import { categoryForLog } from "@/lib/categories";
 import { recordCall } from "@/lib/telemetry";
 
 // One entry shape for telemetry: a tools/call with a non-empty query.
 type RpcLike = {
   method?: string;
-  params?: { arguments?: { query?: string; category?: string } };
+  params?: { arguments?: { query?: string; category?: unknown } };
 };
 
 // Record actual tool calls (fire-and-forget). Tolerates an array body by being
@@ -17,10 +17,9 @@ function recordToolCall(request: Request, rpc: RpcLike): void {
       recordCall(request, {
         endpoint: "mcp",
         format: "mcp",
-        // Agents almost never pass an explicit category, which left most events
-        // uncategorized even though routing detected one fine — so fall back to
-        // the detected category (same matcher the engine routes with).
-        category: rpc.params?.arguments?.category ?? matchCategory(query),
+        // Explicit category only when valid; otherwise the detected one (agents
+        // rarely pass it, and a malformed one must not split the dashboard).
+        category: categoryForLog(query, rpc.params?.arguments?.category),
         query,
       });
     }

@@ -9,10 +9,11 @@ import {
 
 type PageParams = { params: Promise<{ category: string; pair: string }> };
 
-// The pair inventory is registry-derived and closed: only canonical pairs are
-// generated, and nothing renders on demand — a crafted URL 404s at the router.
-export const dynamicParams = false;
-
+// The pair inventory is registry-derived; canonical pairs prerender. Unknown
+// params MUST still reach the page code (dynamicParams default), because a
+// reversed pair earns a 308 to its canonical URL — with dynamicParams=false the
+// router would 404 before the redirect can run. Anything that is neither
+// canonical nor reversible still 404s below, so no crafted URL renders content.
 export function generateStaticParams(): { category: string; pair: string }[] {
   return listComparePairs();
 }
