@@ -51,8 +51,8 @@ describe("secretOk", () => {
 
 describe("adminPinOk (numeric PIN login)", () => {
   it("accepts the configured PIN and rejects anything else", () => {
-    process.env.ADMIN_PIN = "483555";
-    expect(adminPinOk("483555")).toBe(true);
+    process.env.ADMIN_PIN = "246810";
+    expect(adminPinOk("246810")).toBe(true);
     expect(adminPinOk("000000")).toBe(false);
     expect(adminPinOk("")).toBe(false);
     expect(adminPinOk("48355")).toBe(false); // one digit short
@@ -60,7 +60,7 @@ describe("adminPinOk (numeric PIN login)", () => {
 
   it("rejects everything when no PIN is configured", () => {
     delete process.env.ADMIN_PIN;
-    expect(adminPinOk("483555")).toBe(false);
+    expect(adminPinOk("246810")).toBe(false);
     expect(adminPinOk("")).toBe(false);
   });
 
@@ -71,21 +71,21 @@ describe("adminPinOk (numeric PIN login)", () => {
   });
 
   it("does not throw on length-mismatched or odd input (constant-time compare)", () => {
-    process.env.ADMIN_PIN = "483555";
+    process.env.ADMIN_PIN = "246810";
     expect(() => adminPinOk("1")).not.toThrow();
     expect(() => adminPinOk("a-much-longer-wrong-guess")).not.toThrow();
     expect(adminPinOk("1")).toBe(false);
   });
 
   it("adminPinConfigured reflects whether ADMIN_PIN is set", () => {
-    process.env.ADMIN_PIN = "483555";
+    process.env.ADMIN_PIN = "246810";
     expect(adminPinConfigured()).toBe(true);
     delete process.env.ADMIN_PIN;
     expect(adminPinConfigured()).toBe(false);
   });
 
   it("adminPinLength reports the configured PIN length, null when unset", () => {
-    process.env.ADMIN_PIN = "483555";
+    process.env.ADMIN_PIN = "246810";
     expect(adminPinLength()).toBe(6);
     delete process.env.ADMIN_PIN;
     expect(adminPinLength()).toBeNull();
@@ -93,9 +93,9 @@ describe("adminPinOk (numeric PIN login)", () => {
 
   it("PIN login is independent of the secret (and vice versa)", () => {
     process.env.METRICS_SECRET = "s3cr3t";
-    process.env.ADMIN_PIN = "483555";
+    process.env.ADMIN_PIN = "246810";
     expect(adminPinOk("s3cr3t")).toBe(false); // secret is not a valid PIN
-    expect(secretOk("483555")).toBe(false); // PIN is not a valid secret
+    expect(secretOk("246810")).toBe(false); // PIN is not a valid secret
   });
 });
 
